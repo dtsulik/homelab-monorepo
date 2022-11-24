@@ -51,7 +51,7 @@ func main() {
 }
 
 func filter_from_commits(files []os.DirEntry) []os.DirEntry {
-	modified_list, err := exec.Command("git", "log", "--format=", "-n", "10", "--name-only").Output()
+	modified_list, err := exec.Command("git", "log", "--format=", "-n", "1", "--name-only").Output()
 	if err != nil {
 		log.Fatal(err)
 	}
