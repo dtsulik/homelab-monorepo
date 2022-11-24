@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"dagger.io/dagger"
 )
@@ -24,6 +26,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	files = filter_from_commits(files)
 
 	name_prefix := "dtsulik/gif-doggo-"
 	for _, file := range files {
@@ -44,6 +48,21 @@ func main() {
 			log.Fatal(err)
 		}
 	}
+}
+
+func filter_from_commits(files []os.DirEntry) []os.DirEntry {
+	modified_list, err := exec.Command("git", "log", "--format=", "-n", "10", "--name-only").Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	rv := []os.DirEntry{}
+	for _, f := range files {
+		if strings.Contains(string(modified_list), f.Name()) {
+			rv = append(rv, f)
+		}
+	}
+	return rv
 }
 
 func build(target_dir, output_dir string) error {
