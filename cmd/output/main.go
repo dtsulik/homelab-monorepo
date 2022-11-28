@@ -14,5 +14,5 @@ func main() {
 func handle_root(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 	b, _ := io.ReadAll(request.Body)
-	fmt.Fprintf(w, string(b))
+	fmt.Fprint(w, string(b))
 }
