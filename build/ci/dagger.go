@@ -83,7 +83,7 @@ func build(parent_dir, target_dir, output_dir string) error {
 		WithWorkdir("/src").
 		WithEnvVariable("CGO_ENABLED", "0")
 
-	path := "build"
+	path := "output"
 	golang = golang.WithExec(
 		[]string{"go", "build", "-o", path + "/app", target_dir + "/main.go"},
 	)
