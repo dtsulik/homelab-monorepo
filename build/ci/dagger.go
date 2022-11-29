@@ -11,7 +11,7 @@ import (
 	"dagger.io/dagger"
 )
 
-var services = []string{"apigw", "output", "intake", "process", "request", "status"}
+var services = []string{"apigw", "intake", "output", "process", "request", "status"}
 
 func main() {
 	// TODO move these to env vars

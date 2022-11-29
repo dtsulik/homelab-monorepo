@@ -14,6 +14,10 @@ func init() {
 	logger = unsugared.Sugar()
 }
 
+func Debugw(msg string, keysAndValues ...interface{}) {
+	logger.Debugw(msg, keysAndValues...)
+}
+
 func Infow(msg string, keysAndValues ...interface{}) {
 	logger.Infow(msg, keysAndValues...)
 }

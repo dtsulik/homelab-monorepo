@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"net/http"
+	"os"
 
 	"gif-doggo/internal/logger"
 )
@@ -21,6 +21,33 @@ func handle_root(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 
 	logger.Infow("Received request", "method", request.Method, "url", request.URL)
-	b, _ := io.ReadAll(request.Body)
-	fmt.Fprint(w, string(b))
+	if _, ok := request.Header["Filename"]; !ok {
+		logger.Errorw("Filename header not found")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err := receive_file(request.Body, "test")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+}
+
+// TODO - replace with minio
+func receive_file(body io.ReadCloser, filename string) error {
+	defer body.Close()
+
+	file, err := os.Create(filename)
+	if err != nil {
+		logger.Errorw("Failed to create file", "filename", filename, "error", err)
+		return err
+	}
+	defer file.Close()
+
+	_, err = io.Copy(file, body)
+	if err != nil {
+		logger.Errorw("Failed to write file", "error", err)
+		return err
+	}
+	return nil
 }
