@@ -5,19 +5,22 @@ import (
 	"io"
 	"net/http"
 
-	"gif-doggo/pkg/logger"
+	"gif-doggo/internal/logger"
 )
 
 func main() {
-	logger.Log(logger.LogLevelInfo, "Starting server")
+	logger.Infow("Starting server", "port", 8080)
 	http.HandleFunc("/", handle_root)
-	http.ListenAndServe(":80", nil)
+	err := http.ListenAndServe(":80", nil)
+	if err != nil {
+		logger.Fatalw("Failed to start server", "error", err)
+	}
 }
 
 func handle_root(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 
-	logger.Log(logger.LogLevelInfo, "Received request")
+	logger.Infow("Received request", "method", request.Method, "url", request.URL)
 	b, _ := io.ReadAll(request.Body)
 	fmt.Fprint(w, string(b))
 }

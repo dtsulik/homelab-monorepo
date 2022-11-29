@@ -53,6 +53,7 @@ func main() {
 }
 
 func filter_from_commits(files []string) []string {
+	// FIXME this looks at last commit, means if several is pushed at once it will miss all but last one
 	modified_list, err := exec.Command("git", "log", "--format=", "-n", "1", "--name-only").Output()
 	if err != nil {
 		log.Fatal(err)
