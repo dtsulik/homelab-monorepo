@@ -1,0 +1,13 @@
+apigw:
+  enabled: true
+intake:
+  enabled: true
+output:
+  enabled: true
+process:
+  enabled: true
+request:
+  enabled: true
+status:
+  enabled: true
+

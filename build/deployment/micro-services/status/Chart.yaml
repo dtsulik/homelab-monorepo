@@ -1,0 +1,11 @@
+apiVersion: v2
+name: gif-doggo-status
+description: Microservice for getting doggo request status
+type: application
+version: 0.0.1
+appVersion: "0.0.1"
+
+dependencies:
+  - name: app-template
+    version: 0.0.1
+    repository: "file://../../templates/app-template/"

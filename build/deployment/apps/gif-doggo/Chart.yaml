@@ -1,0 +1,35 @@
+apiVersion: v2
+name: gif-doggo
+description: Microservice stack for generating doggos
+type: application
+version: 0.0.1
+appVersion: "0.0.1"
+
+dependencies:
+  - name: app-template
+    version: 0.0.1
+    repository: "file://../../templates/app-template/"
+  - name: gif-doggo-apigw
+    condition: apigw.enabled
+    version: 0.0.1
+    repository: "file://../../micro-services/apigw/"
+  - name: gif-doggo-intake
+    condition: intake.enabled
+    version: 0.0.1
+    repository: "file://../../micro-services/intake/"
+  - name: gif-doggo-output
+    condition: output.enabled
+    version: 0.0.1
+    repository: "file://../../micro-services/output/"
+  - name: gif-doggo-process
+    condition: process.enabled
+    version: 0.0.1
+    repository: "file://../../micro-services/process/"
+  - name: gif-doggo-request
+    condition: request.enabled
+    version: 0.0.1
+    repository: "file://../../micro-services/request/"
+  - name: gif-doggo-status
+    condition: status.enabled
+    version: 0.0.1
+    repository: "file://../../micro-services/status/"

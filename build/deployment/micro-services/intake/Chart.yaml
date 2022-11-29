@@ -1,0 +1,11 @@
+apiVersion: v2
+name: gif-doggo-intake
+description: Microservice for intake of doggos
+type: application
+version: 0.0.1
+appVersion: "0.0.1"
+
+dependencies:
+  - name: app-template
+    version: 0.0.1
+    repository: "file://../../templates/app-template/"
