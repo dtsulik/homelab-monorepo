@@ -6,7 +6,17 @@ import (
 	"net/http"
 
 	"gif-doggo/internal/logger"
+
+	"github.com/go-redis/redis/v9"
 )
+
+var redis_client *redis.Client
+
+func init() {
+	redis_client = redis.NewClient(&redis.Options{
+		Addr: "localhost:6379",
+	})
+}
 
 func main() {
 	logger.Infow("Starting server", "port", 8080)
