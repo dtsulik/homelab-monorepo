@@ -5,27 +5,24 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
-	"strings"
 
 	"dagger.io/dagger"
 )
 
+// List of files modification of which should trigger rebuild
 var services = []string{"apigw", "intake", "output", "process", "request", "status"}
 
 func main() {
-	// TODO move these to env vars
-
 	os.Chdir("../../")
 	parent_dir, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	modified := filter_from_commits(services)
+	// modified := filter_from_commits(services)
 
 	name_prefix := "dtsulik/gif-doggo-"
-	for _, service := range modified {
+	for _, service := range services {
 		fmt.Println("Building and publishing " + service)
 
 		target_dir := "cmd/" + service
@@ -52,21 +49,28 @@ func main() {
 	}
 }
 
-func filter_from_commits(files []string) []string {
-	// FIXME this looks at last commit, means if several is pushed at once it will miss all but last one
-	modified_list, err := exec.Command("git", "log", "--format=", "-n", "1", "--name-only").Output()
-	if err != nil {
-		log.Fatal(err)
-	}
+// FIXME
+// - this looks at last commit, means if several is pushed at once it will miss all but last one
+// - this also breaks down when code outside serivce names are changed like internal/* or pkd/* etc
+// func filter_from_commits(files []string) []string {
+// 	modified_list, err := exec.Command("git", "log", "--format=", "-n", "1", "--name-only").Output()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	rv := []string{}
-	for _, f := range files {
-		if strings.Contains(string(modified_list), f) {
-			rv = append(rv, f)
-		}
-	}
-	return rv
-}
+// 	fmt.Println("List of files: " + string(modified_list))
+
+// 	rv := []string{}
+// 	for _, f := range files {
+// 		if strings.Contains(string(modified_list), f) {
+// 			rv = append(rv, f)
+// 		}
+// 	}
+
+// 	fmt.Println("List of services to build: ", rv)
+
+// 	return rv
+// }
 
 func build(parent_dir, target_dir, output_dir string) error {
 	ctx := context.Background()
