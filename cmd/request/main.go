@@ -13,9 +13,11 @@ import (
 
 	"github.com/go-redis/redis/v9"
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel"
 )
 
 var redis_client *redis.Client
+var tracer_name = "doggo-requests"
 
 // TODO env vars here
 func init() {
@@ -44,6 +46,9 @@ type doggo_request struct {
 func handle_root(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 
+	ctx, span := otel.Tracer(tracer_name).Start(context.Background(), "receive-requests")
+	defer span.End()
+
 	logger.Infow("Received request", "method", request.Method, "url", request.URL)
 
 	body, err := io.ReadAll(request.Body)
@@ -61,7 +66,7 @@ func handle_root(w http.ResponseWriter, request *http.Request) {
 	}
 
 	req.UUID = uuid.New().String()
-	err = publish_request(req)
+	err = publish_request(ctx, req)
 	if err != nil {
 		logger.Errorw("Failed to publish request", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -72,7 +77,11 @@ func handle_root(w http.ResponseWriter, request *http.Request) {
 }
 
 // TODO this is unhandled issue here, what happens if we publish the message but fail to update status? chicken and egg problem
-func publish_request(req doggo_request) error {
+func publish_request(ctx context.Context, req doggo_request) error {
+	_, span := otel.Tracer(tracer_name).Start(ctx, "publish-request")
+	defer span.End()
+
+	// TODO add redis otel
 	err := redis_client.Publish(context.Background(), "doggos", req).Err()
 	if err != nil {
 		logger.Errorw("Failed to submit request", "error", err)

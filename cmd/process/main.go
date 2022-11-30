@@ -13,10 +13,14 @@ import (
 
 	"github.com/andybons/gogif"
 	"github.com/go-redis/redis/v9"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"golang.org/x/image/draw"
 )
 
 var redis_client *redis.Client
+var tracer_name = "doggo-processing"
 
 func init() {
 	redis_client = redis.NewClient(&redis.Options{
@@ -33,6 +37,11 @@ type doggo_request struct {
 
 func main() {
 	ctx := context.Background()
+
+	// TODO add redis otel
+	ctx, span := otel.Tracer(tracer_name).Start(ctx, "receive-requests")
+	defer span.End()
+
 	subscriber := redis_client.Subscribe(ctx, "doggos")
 	for {
 		msg, err := subscriber.ReceiveMessage(ctx)
@@ -47,15 +56,15 @@ func main() {
 		}
 
 		uid_string := msg.Payload
-		err = redis_client.Set(context.Background(), uid_string, "processing", 3600).Err()
+		err = redis_client.Set(ctx, uid_string, "processing", 3600).Err()
 		if err != nil {
 			logger.Errorw("Failed to update request status", "error", err)
 			continue
 		}
 
-		process(&req)
+		process(ctx, &req)
 
-		err = redis_client.Set(context.Background(), uid_string, "done", 3600).Err()
+		err = redis_client.Set(ctx, uid_string, "done", 3600).Err()
 		if err != nil {
 			logger.Errorw("Failed to update request status", "error", err)
 			continue
@@ -63,14 +72,16 @@ func main() {
 	}
 }
 
-func process(req *doggo_request) (*bytes.Buffer, error) {
+func process(ctx context.Context, req *doggo_request) (*bytes.Buffer, error) {
+	_, span := otel.Tracer(tracer_name).Start(ctx, "image-processing")
+	defer span.End()
 
 	var images []*image.Paletted
 
 	var rect image.Rectangle
 	skip := false
 
-	for _, image_key := range req.Images {
+	for idx, image_key := range req.Images {
 		image_body, err := redis_client.Get(context.Background(), image_key).Bytes()
 		if err != nil {
 			logger.Errorw("Failed to get image", "name", image_key, "error", err)
@@ -95,6 +106,10 @@ func process(req *doggo_request) (*bytes.Buffer, error) {
 		draw.CatmullRom.Scale(palettedImage, palettedImage.Rect, img, img.Bounds(), draw.Over, nil)
 
 		images = append(images, palettedImage)
+		span.AddEvent("Processed image",
+			trace.WithAttributes(attribute.Int("no", idx),
+				attribute.String("name", image_key),
+				attribute.Int("size", len(image_body))))
 	}
 
 	var b bytes.Buffer
