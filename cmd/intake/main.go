@@ -5,16 +5,20 @@ import (
 	"io"
 	"net/http"
 	_ "net/http/pprof"
+	"time"
 
+	"gif-doggo/internal/jaegerexport"
 	"gif-doggo/internal/logger"
 
 	"github.com/go-redis/redis/v9"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 )
 
 var redis_client *redis.Client
 var tracer_name = "doggo-intake"
+var tp *tracesdk.TracerProvider
 
 // TODO env vars here
 func init() {
@@ -24,9 +28,30 @@ func init() {
 }
 
 func main() {
+	var err error
+	tp, err = jaegerexport.JaegerTraceProvider("http://jaeger:14268/api/traces")
+	if err != nil {
+		logger.Fatalw("Failed to create tracer provider", "error", err)
+	}
+
+	otel.SetTracerProvider(tp)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	defer func(ctx context.Context) {
+		ctx, cancel = context.WithTimeout(ctx, time.Second*5)
+		defer cancel()
+		if err := tp.Shutdown(ctx); err != nil {
+			logger.Fatalw("Failed to shutdown exporter gracefully", "error", err)
+		}
+	}(ctx)
+
 	logger.Infow("Starting server", "port", 80)
 	http.HandleFunc("/", handle_root)
-	err := http.ListenAndServe(":80", nil)
+
+	// TODO above cancel is useless if the server is blocking and not handling signals
+	err = http.ListenAndServe(":80", nil)
 	if err != nil {
 		logger.Fatalw("Failed to start server", "error", err)
 	}
@@ -35,7 +60,7 @@ func main() {
 func handle_root(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 
-	ctx, span := otel.Tracer(tracer_name).Start(context.TODO(), "upload")
+	ctx, span := tp.Tracer(tracer_name).Start(context.TODO(), "upload")
 	defer span.End()
 
 	logger.Infow("Received request", "method", request.Method, "url", request.URL)
