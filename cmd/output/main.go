@@ -3,6 +3,7 @@ package main
 import (
 	"io"
 	"net/http"
+	_ "net/http/pprof"
 	"os"
 
 	"gif-doggo/internal/logger"

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	_ "net/http/pprof"
 
 	"gif-doggo/internal/logger"
 
