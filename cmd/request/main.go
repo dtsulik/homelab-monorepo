@@ -34,6 +34,7 @@ func main() {
 }
 
 type doggo_request struct {
+	UUID       string   `json:"uuid"`
 	Images     []string `json:"images"`
 	Output     string   `json:"output"`
 	Delays     []int    `json:"delays"`
@@ -59,26 +60,26 @@ func handle_root(w http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	req_id := uuid.New()
-	err = publish_request(req_id, req)
+	req.UUID = uuid.New().String()
+	err = publish_request(req)
 	if err != nil {
 		logger.Errorw("Failed to publish request", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, `{"id": "%s"}`, req_id)
+	fmt.Fprintf(w, `{"id": "%s"}`, req.UUID)
 }
 
 // TODO this is unhandled issue here, what happens if we publish the message but fail to update status? chicken and egg problem
-func publish_request(uid uuid.UUID, req doggo_request) error {
+func publish_request(req doggo_request) error {
 	err := redis_client.Publish(context.Background(), "doggos", req).Err()
 	if err != nil {
 		logger.Errorw("Failed to submit request", "error", err)
 		return err
 	}
 
-	err = redis_client.Set(context.Background(), uid.String(), "submitted", time.Duration(req.Expiration)).Err()
+	err = redis_client.Set(context.Background(), req.UUID, "submitted", time.Duration(req.Expiration)).Err()
 	if err != nil {
 		logger.Errorw("Failed to update request status", "error", err)
 		return err
