@@ -16,6 +16,11 @@ Idea is to expand on the services from the workshop and add apigw to it add more
 
 CICD is done with Dagger in Golang. Deployment will be done with either talking directly to k8s api to ArgoCD api. Since this is a monorepo we can forgo the usual gitops repo and have the cicd code talk to relevant deployment API. (Still not as clean as GitOps, needs more investigation).
 
+## TODO
+- All services are missing structured reponse
+- All services are missing metrics
+- All services are missing tracing
+
 ## MISC
 
 ```bash
