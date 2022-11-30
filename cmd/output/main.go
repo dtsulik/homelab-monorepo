@@ -1,13 +1,24 @@
 package main
 
 import (
+	"bytes"
+	"context"
 	"io"
 	"net/http"
 	_ "net/http/pprof"
-	"os"
 
 	"gif-doggo/internal/logger"
+
+	"github.com/go-redis/redis/v9"
 )
+
+var redis_client *redis.Client
+
+func init() {
+	redis_client = redis.NewClient(&redis.Options{
+		Addr: "redis:6379",
+	})
+}
 
 func main() {
 	logger.Infow("Starting server", "port", 80)
@@ -32,7 +43,6 @@ func handle_root(w http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-	defer file.Close()
 
 	w.Header().Set("Content-Type", "image/gif")
 	_, err = io.Copy(w, file)
@@ -43,12 +53,12 @@ func handle_root(w http.ResponseWriter, request *http.Request) {
 }
 
 // TODO - replace with minio
-func retrieve_file(filename string) (io.ReadCloser, error) {
+func retrieve_file(image_key string) (io.Reader, error) {
 
-	f, err := os.Open(filename)
+	image_body, err := redis_client.Get(context.Background(), image_key).Bytes()
 	if err != nil {
-		logger.Errorw("Failed to open file", "filename", filename, "error", err)
+		logger.Errorw("Failed to retrieve file", "filename", image_key, "error", err)
 		return nil, err
 	}
-	return f, nil
+	return bytes.NewReader(image_body), nil
 }

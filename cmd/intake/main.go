@@ -1,13 +1,24 @@
 package main
 
 import (
+	"context"
 	"io"
 	"net/http"
 	_ "net/http/pprof"
-	"os"
 
 	"gif-doggo/internal/logger"
+
+	"github.com/go-redis/redis/v9"
 )
+
+var redis_client *redis.Client
+
+// TODO env vars here
+func init() {
+	redis_client = redis.NewClient(&redis.Options{
+		Addr: "redis:6379",
+	})
+}
 
 func main() {
 	logger.Infow("Starting server", "port", 80)
@@ -35,19 +46,17 @@ func handle_root(w http.ResponseWriter, request *http.Request) {
 }
 
 // TODO - replace with minio
-func receive_file(body io.ReadCloser, filename string) error {
-	defer body.Close()
+// FIXME - that 3600 is hardcoded still
+func receive_file(body io.Reader, image_key string) error {
 
-	file, err := os.Create(filename)
+	file, err := io.ReadAll(body)
 	if err != nil {
-		logger.Errorw("Failed to create file", "filename", filename, "error", err)
+		logger.Errorw("Failed to read body", "filename", image_key, "error", err)
 		return err
 	}
-	defer file.Close()
-
-	_, err = io.Copy(file, body)
+	_, err = redis_client.Set(context.Background(), image_key, file, 3600).Result()
 	if err != nil {
-		logger.Errorw("Failed to write file", "error", err)
+		logger.Errorw("Failed to save file", "filename", image_key, "error", err)
 		return err
 	}
 	return nil
