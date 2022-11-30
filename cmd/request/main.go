@@ -2,10 +2,12 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	_ "net/http/pprof"
+	"time"
 
 	"gif-doggo/internal/logger"
 
@@ -18,7 +20,7 @@ var redis_client *redis.Client
 // TODO env vars here
 func init() {
 	redis_client = redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+		Addr: "redis:6379",
 	})
 }
 
@@ -31,13 +33,34 @@ func main() {
 	}
 }
 
+type doggo_request struct {
+	Images     []string `json:"images"`
+	Output     string   `json:"output"`
+	Delays     []int    `json:"delays"`
+	Expiration int      `json:"expiration"`
+}
+
 func handle_root(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 
 	logger.Infow("Received request", "method", request.Method, "url", request.URL)
-	req_id := uuid.New()
 
-	err := publish_request(req_id, request.Body)
+	body, err := io.ReadAll(request.Body)
+	if err != nil {
+		logger.Errorw("Invalid request", "error", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	req := doggo_request{}
+	if err := json.Unmarshal(body, &req); err != nil {
+		logger.Errorw("Invalid request", "error", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	req_id := uuid.New()
+	err = publish_request(req_id, req)
 	if err != nil {
 		logger.Errorw("Failed to publish request", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -47,15 +70,15 @@ func handle_root(w http.ResponseWriter, request *http.Request) {
 	fmt.Fprintf(w, `{"id": "%s"}`, req_id)
 }
 
-func publish_request(uid uuid.UUID, req_body io.ReadCloser) error {
-	err := redis_client.Publish(context.Background(), "doggos", req_body).Err()
+// TODO this is unhandled issue here, what happens if we publish the message but fail to update status? chicken and egg problem
+func publish_request(uid uuid.UUID, req doggo_request) error {
+	err := redis_client.Publish(context.Background(), "doggos", req).Err()
 	if err != nil {
 		logger.Errorw("Failed to submit request", "error", err)
 		return err
 	}
 
-	// TODO set expiry from the request, infitinte doggos cost more money
-	err = redis_client.Set(context.Background(), uid.String(), "submitted", 3600).Err()
+	err = redis_client.Set(context.Background(), uid.String(), "submitted", time.Duration(req.Expiration)).Err()
 	if err != nil {
 		logger.Errorw("Failed to update request status", "error", err)
 		return err
