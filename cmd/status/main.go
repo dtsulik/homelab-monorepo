@@ -1,8 +1,8 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"io"
 	"net/http"
 	_ "net/http/pprof"
 
@@ -15,7 +15,7 @@ var redis_client *redis.Client
 
 func init() {
 	redis_client = redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+		Addr: "redis:6379",
 	})
 }
 
@@ -32,6 +32,12 @@ func handle_root(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 
 	logger.Infow("Received request", "method", request.Method, "url", request.URL)
-	b, _ := io.ReadAll(request.Body)
-	fmt.Fprint(w, string(b))
+	uid := request.URL.Query().Get("uid")
+	status := provide_status(uid)
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprintf(w, `{"status": "%s"}`, status)
+}
+
+func provide_status(uid string) string {
+	return redis_client.Get(context.Background(), uid).Val()
 }
