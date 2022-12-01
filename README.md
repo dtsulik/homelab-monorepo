@@ -41,3 +41,14 @@ cd build/deployment/cluster
 kind create cluster --config=kind.yaml
 ```
 
+## ALB annotations
+```yaml
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/load-balancer-name: 
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+```
+
+
