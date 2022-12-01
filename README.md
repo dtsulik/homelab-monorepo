@@ -34,5 +34,10 @@ curl -v -X POST \
     https://apigw.local/request
 ```
 
+# K8S
 
+```bash
+cd build/deployment/cluster
+kind create cluster --config=kind.yaml
+```
 
