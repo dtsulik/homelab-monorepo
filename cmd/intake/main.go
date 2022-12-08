@@ -48,6 +48,8 @@ func main() {
 	}(ctx)
 
 	logger.Infow("Starting server", "port", 80)
+	http.HandleFunc("/readyz", func(w http.ResponseWriter, request *http.Request) {})
+	http.HandleFunc("/livez", func(w http.ResponseWriter, request *http.Request) {})
 	http.HandleFunc("/", handle_root)
 
 	// TODO above cancel is useless if the server is blocking and not handling signals

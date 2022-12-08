@@ -25,6 +25,8 @@ func init() {
 
 func main() {
 	logger.Infow("Starting server", "port", 80)
+	http.HandleFunc("/readyz", func(w http.ResponseWriter, request *http.Request) {})
+	http.HandleFunc("/livez", func(w http.ResponseWriter, request *http.Request) {})
 	http.HandleFunc("/", handle_root)
 	err := http.ListenAndServe(":80", nil)
 	if err != nil {

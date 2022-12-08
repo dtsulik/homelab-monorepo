@@ -7,7 +7,9 @@ import (
 	"encoding/json"
 	"image"
 	"image/gif"
+	"net/http"
 	_ "net/http/pprof"
+	"time"
 
 	"gif-doggo/internal/logger"
 
@@ -42,11 +44,27 @@ func main() {
 	ctx, span := otel.Tracer(tracer_name).Start(ctx, "receive-requests")
 	defer span.End()
 
+	go func() {
+		logger.Infow("Starting server for health/readiness checks", "port", 80)
+		http.HandleFunc("/readyz", func(w http.ResponseWriter, request *http.Request) {})
+		http.HandleFunc("/livez", func(w http.ResponseWriter, request *http.Request) {})
+		err := http.ListenAndServe(":80", nil)
+		if err != nil {
+			logger.Fatalw("Failed to start server", "error", err)
+		}
+	}()
+
 	subscriber := redis_client.Subscribe(ctx, "doggos")
 	for {
+		// FIXME change this to channel implementation
 		msg, err := subscriber.ReceiveMessage(ctx)
 		if err != nil {
 			logger.Errorw("Failed to receive message", "error", err)
+		}
+
+		if msg == nil {
+			time.Sleep(1 * time.Second)
+			continue
 		}
 
 		req := doggo_request{}
