@@ -6,21 +6,19 @@ gif-doggo-intake:
   enabled: true
   env:
     TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
-  service:
-    port: 444
 gif-doggo-output:
-  enabled: false
+  enabled: true
   env:
     TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
 gif-doggo-process:
-  enabled: false
+  enabled: true
   env:
     TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
 gif-doggo-request:
-  enabled: false
+  enabled: true
   env:
     TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
 gif-doggo-status:
-  enabled: false
+  enabled: true
   env:
     TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
