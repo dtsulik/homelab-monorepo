@@ -1,5 +1,7 @@
 apigw:
   enabled: true
+  env:
+  - TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
 intake:
   enabled: true
 output:

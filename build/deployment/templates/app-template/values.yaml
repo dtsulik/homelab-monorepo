@@ -35,6 +35,8 @@ service:
   type: ClusterIP
   port: 80
 
+env:
+
 ingress:
   enabled: false
   className: ""
