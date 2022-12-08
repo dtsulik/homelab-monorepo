@@ -11,6 +11,7 @@ import (
 	_ "net/http/pprof"
 	"time"
 
+	"gif-doggo/internal/jaegerexport"
 	"gif-doggo/internal/logger"
 
 	"github.com/andybons/gogif"
@@ -38,6 +39,13 @@ type doggo_request struct {
 }
 
 func main() {
+	tp, err := jaegerexport.JaegerTraceProvider("http://jaeger:14268/api/traces")
+	if err != nil {
+		logger.Fatalw("Failed to create tracer provider", "error", err)
+	}
+
+	otel.SetTracerProvider(tp)
+
 	ctx := context.Background()
 
 	// TODO add redis otel

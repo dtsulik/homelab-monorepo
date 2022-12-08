@@ -6,6 +6,7 @@ import (
 	"net/http"
 	_ "net/http/pprof"
 
+	"gif-doggo/internal/jaegerexport"
 	"gif-doggo/internal/logger"
 
 	"github.com/go-redis/redis/v9"
@@ -22,11 +23,18 @@ func init() {
 }
 
 func main() {
+	tp, err := jaegerexport.JaegerTraceProvider("http://jaeger:14268/api/traces")
+	if err != nil {
+		logger.Fatalw("Failed to create tracer provider", "error", err)
+	}
+
+	otel.SetTracerProvider(tp)
+
 	logger.Infow("Starting server", "port", 80)
 	http.HandleFunc("/readyz", func(w http.ResponseWriter, request *http.Request) {})
 	http.HandleFunc("/livez", func(w http.ResponseWriter, request *http.Request) {})
 	http.HandleFunc("/", handle_root)
-	err := http.ListenAndServe(":80", nil)
+	err = http.ListenAndServe(":80", nil)
 	if err != nil {
 		logger.Fatalw("Failed to start server", "error", err)
 	}
