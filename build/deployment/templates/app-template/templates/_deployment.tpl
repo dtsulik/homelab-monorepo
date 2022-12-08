@@ -38,13 +38,15 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+          - name: K8S_SERVICE_PORT
+            value: {{ .Values.service.port | quote }}
           {{- range $k, $v := .Values.env }}
           - name: {{ $k }}
-            value: {{ $v }}
+            value: {{ $v | quote }}
           {{- end }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
