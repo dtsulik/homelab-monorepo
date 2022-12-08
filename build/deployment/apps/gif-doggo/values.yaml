@@ -1,14 +1,24 @@
 apigw:
-  enabled: true
+  enabled: false
   env:
   - TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
 intake:
   enabled: true
+  env:
+  - TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
 output:
   enabled: true
+  env:
+  - TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
 process:
   enabled: true
+  env:
+  - TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
 request:
   enabled: true
+  env:
+  - TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
 status:
   enabled: true
+  env:
+  - TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
