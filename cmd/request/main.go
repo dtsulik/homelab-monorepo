@@ -9,6 +9,7 @@ import (
 	_ "net/http/pprof"
 	"time"
 
+	"gif-doggo/internal/helpers"
 	"gif-doggo/internal/jaegerexport"
 	"gif-doggo/internal/logger"
 
@@ -28,7 +29,10 @@ func init() {
 }
 
 func main() {
-	tp, err := jaegerexport.JaegerTraceProvider("http://jaeger:14268/api/traces")
+	tc_ep := helpers.GetEnv("TRACECOLLECTOR_ENDPOINT", "http://jaeger:14268/api/traces")
+	logger.Infow("Sending traces to " + tc_ep)
+
+	tp, err := jaegerexport.JaegerTraceProvider(tc_ep)
 	if err != nil {
 		logger.Fatalw("Failed to create tracer provider", "error", err)
 	}
