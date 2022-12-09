@@ -1,3 +1,8 @@
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: false
 gif-doggo-apigw:
   enabled: false
   env:
