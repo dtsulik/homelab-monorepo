@@ -24,11 +24,29 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+
 	"golang.org/x/image/draw"
 )
 
-var redis_client *redis.Client
-var tracer_name = "doggo-processing"
+var (
+	redis_client     *redis.Client
+	tracer_name      = "doggo-processing"
+	doggos_processed = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "total_doggos_processed",
+		Help: "The total number of doggo images ingested for creating GIFs",
+	})
+	doggos_created = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "total_doggos_created",
+		Help: "The total number of doggo GIFs created",
+	})
+	doggos_failed = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "total_doggos_failed",
+		Help: "The total number of doggo GIFs failed to create",
+	})
+)
 
 func init() {
 	redis_client = redis.NewClient(&redis.Options{
@@ -67,6 +85,7 @@ func main() {
 		logger.Infow("Starting server for health/readiness checks", "port", 80)
 		http.HandleFunc("/readyz", func(w http.ResponseWriter, request *http.Request) {})
 		http.HandleFunc("/livez", func(w http.ResponseWriter, request *http.Request) {})
+		http.Handle("/metrics", promhttp.Handler())
 		err := http.ListenAndServe(":80", nil)
 		if err != nil {
 			logger.Fatalw("Failed to start server", "error", err)
@@ -76,6 +95,7 @@ func main() {
 	subscriber := redis_client.Subscribe(ctx, "doggos")
 	for {
 		// FIXME change this to channel implementation
+		status := "processing"
 		msg, err := subscriber.ReceiveMessage(ctx)
 		if err != nil {
 			logger.Errorw("Failed to receive message", "error", err)
@@ -93,15 +113,24 @@ func main() {
 		}
 
 		uid_string := msg.Payload
-		err = redis_client.Set(ctx, uid_string, "processing", 3600).Err()
+		err = redis_client.Set(ctx, uid_string, status, 3600).Err()
 		if err != nil {
 			logger.Errorw("Failed to update request status", "error", err)
 			continue
 		}
 
-		process(ctx, &req)
+		// TODO store output doggos
+		_, err = process(ctx, &req)
+		if err != nil {
+			logger.Errorw("Failed to process doggo", "error", err)
+			status = "failed"
+			doggos_failed.Inc()
+		} else {
+			status = "done"
+			doggos_created.Inc()
+		}
 
-		err = redis_client.Set(ctx, uid_string, "done", 3600).Err()
+		err = redis_client.Set(ctx, uid_string, status, 3600).Err()
 		if err != nil {
 			logger.Errorw("Failed to update request status", "error", err)
 			continue
@@ -143,6 +172,7 @@ func process(ctx context.Context, req *doggo_request) (*bytes.Buffer, error) {
 		draw.CatmullRom.Scale(palettedImage, palettedImage.Rect, img, img.Bounds(), draw.Over, nil)
 
 		images = append(images, palettedImage)
+		doggos_processed.Inc()
 		span.AddEvent("Processed image",
 			trace.WithAttributes(attribute.Int("no", idx),
 				attribute.String("name", image_key),
