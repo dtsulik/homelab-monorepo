@@ -11,6 +11,7 @@ metadata:
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 1
   {{- end }}
   selector:
     matchLabels:
