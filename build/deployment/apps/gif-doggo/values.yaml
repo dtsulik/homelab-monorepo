@@ -1,3 +1,7 @@
+env: &envs
+  REDIS_ENDPOINT: "gif-doggo-redis-master:6379"
+  TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
+
 redis:
   enabled: true
   architecture: standalone
@@ -8,25 +12,19 @@ redis:
       enabled: false
 gif-doggo-apigw:
   enabled: false
-  env:
-    TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
+  env: *envs
 gif-doggo-intake:
   enabled: true
-  env:
-    TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
+  env: *envs
 gif-doggo-output:
   enabled: true
-  env:
-    TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
+  env: *envs
 gif-doggo-process:
   enabled: true
-  env:
-    TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
+  env: *envs
 gif-doggo-request:
   enabled: true
-  env:
-    TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
+  env: *envs
 gif-doggo-status:
   enabled: true
-  env:
-    TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
+  env: *envs
