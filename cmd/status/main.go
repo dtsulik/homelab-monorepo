@@ -69,5 +69,5 @@ func provide_status(ctx context.Context, uid string) string {
 
 	span.SetAttributes(attribute.String("request.uid", uid))
 
-	return redis_client.Get(context.Background(), uid).Val()
+	return redis_client.Get(ctx, uid).Val()
 }

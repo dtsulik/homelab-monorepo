@@ -82,7 +82,7 @@ func retrieve_file(ctx context.Context, image_key string) (io.Reader, error) {
 	_, span := otel.Tracer(tracer_name).Start(ctx, "file-retreival")
 	defer span.End()
 
-	image_body, err := redis_client.Get(context.Background(), image_key).Bytes()
+	image_body, err := redis_client.Get(ctx, image_key).Bytes()
 	if err != nil {
 		logger.Errorw("Failed to retrieve file", "filename", image_key, "error", err)
 		return nil, err

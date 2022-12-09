@@ -119,7 +119,7 @@ func process(ctx context.Context, req *doggo_request) (*bytes.Buffer, error) {
 	skip := false
 
 	for idx, image_key := range req.Images {
-		image_body, err := redis_client.Get(context.Background(), image_key).Bytes()
+		image_body, err := redis_client.Get(ctx, image_key).Bytes()
 		if err != nil {
 			logger.Errorw("Failed to get image", "name", image_key, "error", err)
 			return nil, err

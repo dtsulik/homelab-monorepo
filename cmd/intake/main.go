@@ -88,7 +88,7 @@ func receive_file(ctx context.Context, body io.Reader, image_key string) error {
 	span.SetAttributes(attribute.String("request.filename", image_key))
 	span.SetAttributes(attribute.Int("request.filesize", len(file)))
 
-	_, err = redis_client.Set(context.Background(), image_key, file, 3600).Result()
+	_, err = redis_client.Set(ctx, image_key, file, 3600).Result()
 	if err != nil {
 		logger.Errorw("Failed to save file", "filename", image_key, "error", err)
 		return err

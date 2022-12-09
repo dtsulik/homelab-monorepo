@@ -102,13 +102,13 @@ func publish_request(ctx context.Context, req doggo_request) error {
 	defer span.End()
 
 	// TODO add redis otel
-	err := redis_client.Publish(context.Background(), "doggos", req).Err()
+	err := redis_client.Publish(ctx, "doggos", req).Err()
 	if err != nil {
 		logger.Errorw("Failed to submit request", "error", err)
 		return err
 	}
 
-	err = redis_client.Set(context.Background(), req.UUID, "submitted", time.Duration(req.Expiration)).Err()
+	err = redis_client.Set(ctx, req.UUID, "submitted", time.Duration(req.Expiration)).Err()
 	if err != nil {
 		logger.Errorw("Failed to update request status", "error", err)
 		return err
