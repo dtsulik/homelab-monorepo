@@ -11,7 +11,9 @@ import (
 
 	"gif-doggo/internal/logger"
 
+	"github.com/go-redis/redis/extra/redisotel/v9"
 	"github.com/go-redis/redis/v9"
+
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 )
@@ -24,6 +26,9 @@ func init() {
 	redis_client = redis.NewClient(&redis.Options{
 		Addr: "redis:6379",
 	})
+	if err := redisotel.InstrumentTracing(redis_client); err != nil {
+		logger.Fatalw("Unable to start redis otel")
+	}
 }
 
 func main() {

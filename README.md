@@ -25,13 +25,13 @@ CICD is done with Dagger in Golang. Deployment will be done with either talking 
 
 ```bash
 # upload data
-curl -v --data-binary "@pun.jpg" -H "filename: pun.jpg" -X POST https://apigw.local/upload
+curl -v --data-binary "@pun.jpg" -H "filename: pun.jpg" -X POST https://k8s-doggo.local/upload
 
 # request
 curl -v -X POST \
     -H "Content-Type: application/json" \
     --data '{"images": ["doge.jpg", "pun.jpg"], "delays": [100,100], "output":"doggo.gif"}' \
-    https://apigw.local/request
+    https://k8s-doggo.local/request
 ```
 
 # K8S
