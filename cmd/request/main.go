@@ -27,7 +27,7 @@ var tracer_name = "doggo-requests"
 // TODO env vars here
 func init() {
 	redis_client = redis.NewClient(&redis.Options{
-		Addr: "redis:6379",
+		Addr: helpers.GetEnv("REDIS_ENDPOINT", "redis:6379"),
 	})
 	if err := redisotel.InstrumentTracing(redis_client); err != nil {
 		logger.Fatalw("Unable to start redis otel")
