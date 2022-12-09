@@ -12,6 +12,7 @@ import (
 
 	"github.com/go-redis/redis/v9"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 )
 
 var redis_client *redis.Client
@@ -60,6 +61,8 @@ func handle_root(w http.ResponseWriter, request *http.Request) {
 func provide_status(ctx context.Context, uid string) string {
 	_, span := otel.Tracer(tracer_name).Start(ctx, "retrieve-status")
 	defer span.End()
+
+	span.SetAttributes(attribute.String("request.uid", uid))
 
 	return redis_client.Get(context.Background(), uid).Val()
 }
