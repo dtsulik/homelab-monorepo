@@ -3,6 +3,9 @@ redis:
   architecture: standalone
   auth:
     enabled: false
+  master:
+    persistence:
+      enabled: false
 gif-doggo-apigw:
   enabled: false
   env:
