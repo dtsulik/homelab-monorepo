@@ -22,6 +22,9 @@ spec:
     metadata:
       name: '{{path.basename}}-{{cluster}}'
     spec:
+      syncPolicy:
+        automated:
+          prune: true
       project: '{{values.project}}'
       source:
         repoURL: https://github.com/dtsulik/homelab-gitops.git
