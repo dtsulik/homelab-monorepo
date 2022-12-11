@@ -10,6 +10,7 @@ metadata:
     {{- if .Values.argocdAutoupdate.enabled }}
     argocd-image-updater.argoproj.io/image-list: image={{ .Values.image.repository }}:{{ .Values.argocdAutoupdate.tag }}
     argocd-image-updater.argoproj.io/image.update-strategy: {{ .Values.argocdAutoupdate.strategy }}
+    argocd-image-updater.argoproj.io/image.allow-tags: {{ .Values.argocdAutoupdate.tag }}
     {{- end }}
   labels:
     {{- include "app-template.labels" . | nindent 4 }}
