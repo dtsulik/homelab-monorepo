@@ -16,15 +16,23 @@ gif-doggo-apigw:
 gif-doggo-intake:
   enabled: true
   env: *envs
+  ingress:
+    enabled: false
 gif-doggo-output:
   enabled: true
   env: *envs
+  ingress:
+    enabled: false
 gif-doggo-process:
   enabled: true
   env: *envs
+  ingress:
+    enabled: false
 gif-doggo-request:
   enabled: true
   env: *envs
+  ingress:
+    enabled: false
 gif-doggo-status:
   enabled: true
   env: *envs
