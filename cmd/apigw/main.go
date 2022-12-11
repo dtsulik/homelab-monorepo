@@ -12,6 +12,7 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/propagation"
 )
 
 var (
@@ -29,6 +30,10 @@ func main() {
 	}
 
 	otel.SetTracerProvider(tp)
+	otel.SetTextMapPropagator(propagation.TraceContext{})
+
+	tr := otelhttp.NewTransport(http.DefaultTransport, otelhttp.WithTracerProvider(tp))
+	http_client := &http.Client{Transport: tr}
 
 	logger.Infow("Starting server", "port", 80)
 	mux := http.NewServeMux()
@@ -48,7 +53,10 @@ func main() {
 		switch {
 		case request.Method == "GET" && request.URL.Path == "/status":
 			logger.Infow("Getting status", "url", status_ep)
-			resp, err := otelhttp.Get(ctx, status_ep)
+			req, _ := http.NewRequestWithContext(ctx, "GET", status_ep, nil)
+			propagation.TraceContext{}.Inject(ctx, propagation.HeaderCarrier(req.Header))
+			resp, err := http_client.Do(req)
+
 			defer resp.Body.Close()
 
 			if err != nil {

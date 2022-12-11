@@ -16,6 +16,7 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/propagation"
 )
 
 var redis_client *redis.Client
@@ -59,7 +60,8 @@ type status struct {
 func (s status) ServeHTTP(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 
-	ctx, span := otel.Tracer(tracer_name).Start(context.Background(), "receive-status-request")
+	ctx, span := otel.Tracer(tracer_name).Start(request.Context(), "receive-status-request")
+	ctx = propagation.TraceContext{}.Extract(ctx, propagation.HeaderCarrier(request.Header))
 	defer span.End()
 
 	logger.Infow("Received request", "method", request.Method, "url", request.URL)
