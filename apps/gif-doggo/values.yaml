@@ -11,20 +11,20 @@ redis:
     persistence:
       enabled: false
 gif-doggo-apigw:
-  enabled: false
+  enabled: true
   env: *envs
 gif-doggo-intake:
-  enabled: false
+  enabled: true
   env: *envs
 gif-doggo-output:
-  enabled: false
+  enabled: true
   env: *envs
 gif-doggo-process:
-  enabled: false
+  enabled: true
   env: *envs
 gif-doggo-request:
-  enabled: false
+  enabled: true
   env: *envs
 gif-doggo-status:
-  enabled: false
+  enabled: true
   env: *envs
