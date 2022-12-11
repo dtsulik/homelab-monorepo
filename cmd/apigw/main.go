@@ -11,7 +11,6 @@ import (
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/propagation"
 )
 
 var (
@@ -30,7 +29,7 @@ func main() {
 	}
 
 	otel.SetTracerProvider(tp)
-	otel.SetTextMapPropagator(propagation.TraceContext{})
+	// otel.SetTextMapPropagator(propagation.TraceContext{})
 
 	tr := otelhttp.NewTransport(http.DefaultTransport, otelhttp.WithTracerProvider(tp))
 	http_client = &http.Client{Transport: tr}
