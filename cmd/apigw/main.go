@@ -78,7 +78,7 @@ func (apigw) ServeHTTP(w http.ResponseWriter, request *http.Request) {
 			req, _ := http.NewRequestWithContext(ctx, request.Method, request.URL.Path, nil)
 			resp, err := http_client.Do(req)
 			if err != nil {
-				logger.Errorw("Failed to reach endpoint handler",
+				logger.Errorw("Failed to reach endpoint handler.",
 					"path", request.URL.Path,
 					"method", request.Method,
 					"handler", ep.host,
