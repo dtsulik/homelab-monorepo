@@ -2,10 +2,10 @@ apiVersion: v2
 name: gif-doggo-apigw
 description: Microservice for apigw of doggos
 type: application
-version: 0.0.3
-appVersion: "0.0.3"
+version: 0.0.4
+appVersion: "0.0.4"
 
 dependencies:
   - name: app-template
-    version: 0.0.3
+    version: 0.0.4
     repository: "file://../../templates/app-template/"
