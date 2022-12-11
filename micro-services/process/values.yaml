@@ -5,6 +5,11 @@ image:
   pullPolicy: Always
   tag: latest
 
+argocdAutoupdate:
+  enabled: true
+  tag: latest
+  strategy: digest
+
 replicaCount: 1
 
 imagePullSecrets: []

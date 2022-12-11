@@ -8,98 +8,98 @@ entries:
     name: app-template
     type: library
     urls:
-    - charts/app-template-0.0.3.tgz
-    version: 0.0.3
+    - charts/app-template-0.0.4.tgz
+    version: 0.0.4
   gif-doggo-apigw:
   - apiVersion: v2
-    appVersion: 0.0.3
+    appversion: 0.0.4
     created: "2022-12-11T13:58:41.296948+04:00"
     dependencies:
     - name: app-template
       repository: https://dtsulik.github.io
-      version: 0.0.3
+      version: 0.0.4
     description: Microservice for apigw of doggos
     digest: 4eeec83b4b84bd8df173cb6149e8ecf3be5f3e263d3bc0e723ecbe9282911cde
     name: gif-doggo-apigw
     type: application
     urls:
-    - charts/gif-doggo-apigw-0.0.3.tgz
-    version: 0.0.3
+    - charts/gif-doggo-apigw-0.0.4.tgz
+    version: 0.0.4
   gif-doggo-intake:
   - apiVersion: v2
-    appVersion: 0.0.3
+    appversion: 0.0.4
     created: "2022-12-11T13:58:41.2975089+04:00"
     dependencies:
     - name: app-template
       repository: https://dtsulik.github.io
-      version: 0.0.3
+      version: 0.0.4
     description: Microservice for intake of doggos
     digest: aace6c6ab7963912c09d3a065bfdc0d17e663e41a50ffaa5acb06497028e8652
     name: gif-doggo-intake
     type: application
     urls:
-    - charts/gif-doggo-intake-0.0.3.tgz
-    version: 0.0.3
+    - charts/gif-doggo-intake-0.0.4.tgz
+    version: 0.0.4
   gif-doggo-output:
   - apiVersion: v2
-    appVersion: 0.0.3
+    appversion: 0.0.4
     created: "2022-12-11T13:58:41.2986425+04:00"
     dependencies:
     - name: app-template
       repository: https://dtsulik.github.io
-      version: 0.0.3
+      version: 0.0.4
     description: Microservice for doggo output
     digest: 1f65796f1eb8a44567a7068b28bf6991752fe192739c7bf03b691c5941fa7799
     name: gif-doggo-output
     type: application
     urls:
-    - charts/gif-doggo-output-0.0.3.tgz
-    version: 0.0.3
+    - charts/gif-doggo-output-0.0.4.tgz
+    version: 0.0.4
   gif-doggo-process:
   - apiVersion: v2
-    appVersion: 0.0.3
+    appversion: 0.0.4
     created: "2022-12-11T13:58:41.299196+04:00"
     dependencies:
     - name: app-template
       repository: https://dtsulik.github.io
-      version: 0.0.3
+      version: 0.0.4
     description: Microservice for processing doggo requests in queue
     digest: 8afebb28e42ea02f5a53b00055639e9c6cbb1cd4d2ec522f2c11b7069d0ae4da
     name: gif-doggo-process
     type: application
     urls:
-    - charts/gif-doggo-process-0.0.3.tgz
-    version: 0.0.3
+    - charts/gif-doggo-process-0.0.4.tgz
+    version: 0.0.4
   gif-doggo-request:
   - apiVersion: v2
-    appVersion: 0.0.3
+    appversion: 0.0.4
     created: "2022-12-11T13:58:41.2997298+04:00"
     dependencies:
     - name: app-template
       repository: https://dtsulik.github.io
-      version: 0.0.3
+      version: 0.0.4
     description: Microservice for putting doggo requests in queue
     digest: c2d86015f768368af6b26db03d68f532cd426da5ecc51fe35b138fdd4d9ca08d
     name: gif-doggo-request
     type: application
     urls:
-    - charts/gif-doggo-request-0.0.3.tgz
-    version: 0.0.3
+    - charts/gif-doggo-request-0.0.4.tgz
+    version: 0.0.4
   gif-doggo-status:
   - apiVersion: v2
-    appVersion: 0.0.3
+    appversion: 0.0.4
     created: "2022-12-11T13:58:41.3002909+04:00"
     dependencies:
     - name: app-template
       repository: https://dtsulik.github.io
-      version: 0.0.3
+      version: 0.0.4
     description: Microservice for getting doggo request status
     digest: 8f6f14b130d03c3c254468b8023818f2699a69873474b0214d9c6891e00ed735
     name: gif-doggo-status
     type: application
     urls:
-    - charts/gif-doggo-status-0.0.3.tgz
-    version: 0.0.3
+    - charts/gif-doggo-status-0.0.4.tgz
+    version: 0.0.4
   redis:
   - annotations:
       category: Database
