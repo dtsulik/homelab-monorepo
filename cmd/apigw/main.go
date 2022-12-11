@@ -8,6 +8,7 @@ import (
 	"gif-doggo/internal/jaegerexport"
 	"gif-doggo/internal/logger"
 
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 )
@@ -31,8 +32,12 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, request *http.Request) {
 		defer request.Body.Close()
 
-		_, span := otel.Tracer(tracer_name).Start(request.Context(), "upload")
+		ctx, span := otel.Tracer(tracer_name).Start(request.Context(), "upload")
 		defer span.End()
+
+		client := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
+		req, _ := http.NewRequestWithContext(ctx, "GET", "test/test", nil)
+		client.Do(req)
 
 		span.SetAttributes(attribute.String("url", request.URL.String()))
 		span.SetAttributes(attribute.String("method", request.Method))
