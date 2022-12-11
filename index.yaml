@@ -2,9 +2,9 @@ apiVersion: v1
 entries:
   app-template:
   - apiVersion: v2
-    created: "2022-12-11T13:58:41.2963865+04:00"
+    created: "2022-12-12T00:42:23.4192629+04:00"
     description: A library for deploying simple apps
-    digest: a2ecb3f7ddd1d16a4b2977b4cb220e862f58684f01b432227b929774f51d9721
+    digest: 3b93f392321247d7c8a79d864526737ae860bfe89b14697f11f995acabec1f2d
     name: app-template
     type: library
     urls:
@@ -12,14 +12,14 @@ entries:
     version: 0.0.4
   gif-doggo-apigw:
   - apiVersion: v2
-    appversion: 0.0.4
-    created: "2022-12-11T13:58:41.296948+04:00"
+    appVersion: 0.0.4
+    created: "2022-12-12T00:42:23.4203584+04:00"
     dependencies:
     - name: app-template
       repository: https://dtsulik.github.io
       version: 0.0.4
     description: Microservice for apigw of doggos
-    digest: 4eeec83b4b84bd8df173cb6149e8ecf3be5f3e263d3bc0e723ecbe9282911cde
+    digest: 53ab390f51ff341bdf65eda4cfc8d69d9dbabae870775570d4faa61b073e247c
     name: gif-doggo-apigw
     type: application
     urls:
@@ -27,14 +27,14 @@ entries:
     version: 0.0.4
   gif-doggo-intake:
   - apiVersion: v2
-    appversion: 0.0.4
-    created: "2022-12-11T13:58:41.2975089+04:00"
+    appVersion: 0.0.4
+    created: "2022-12-12T00:42:23.4203584+04:00"
     dependencies:
     - name: app-template
       repository: https://dtsulik.github.io
       version: 0.0.4
     description: Microservice for intake of doggos
-    digest: aace6c6ab7963912c09d3a065bfdc0d17e663e41a50ffaa5acb06497028e8652
+    digest: a4bf196fa18da5603cb3a9f076e94f191e8b71237591a2b8bc91d1715e5ec881
     name: gif-doggo-intake
     type: application
     urls:
@@ -42,14 +42,14 @@ entries:
     version: 0.0.4
   gif-doggo-output:
   - apiVersion: v2
-    appversion: 0.0.4
-    created: "2022-12-11T13:58:41.2986425+04:00"
+    appVersion: 0.0.4
+    created: "2022-12-12T00:42:23.420932+04:00"
     dependencies:
     - name: app-template
       repository: https://dtsulik.github.io
       version: 0.0.4
     description: Microservice for doggo output
-    digest: 1f65796f1eb8a44567a7068b28bf6991752fe192739c7bf03b691c5941fa7799
+    digest: 8cbc7607979e384dd2f4da236c6c6e97e598d94c4e67bd56e626ccca60285bc6
     name: gif-doggo-output
     type: application
     urls:
@@ -57,14 +57,14 @@ entries:
     version: 0.0.4
   gif-doggo-process:
   - apiVersion: v2
-    appversion: 0.0.4
-    created: "2022-12-11T13:58:41.299196+04:00"
+    appVersion: 0.0.4
+    created: "2022-12-12T00:42:23.4215033+04:00"
     dependencies:
     - name: app-template
       repository: https://dtsulik.github.io
       version: 0.0.4
     description: Microservice for processing doggo requests in queue
-    digest: 8afebb28e42ea02f5a53b00055639e9c6cbb1cd4d2ec522f2c11b7069d0ae4da
+    digest: 467f14f944faefef48f1075a4a0ad0e9a8deaa21d07bd433feec0dc31c2a742a
     name: gif-doggo-process
     type: application
     urls:
@@ -72,14 +72,14 @@ entries:
     version: 0.0.4
   gif-doggo-request:
   - apiVersion: v2
-    appversion: 0.0.4
-    created: "2022-12-11T13:58:41.2997298+04:00"
+    appVersion: 0.0.4
+    created: "2022-12-12T00:42:23.4221271+04:00"
     dependencies:
     - name: app-template
       repository: https://dtsulik.github.io
       version: 0.0.4
     description: Microservice for putting doggo requests in queue
-    digest: c2d86015f768368af6b26db03d68f532cd426da5ecc51fe35b138fdd4d9ca08d
+    digest: ab6d8abac17e56063a0053f51fee8bf3e6842d6206334e30d1a27db99d4b3dae
     name: gif-doggo-request
     type: application
     urls:
@@ -87,48 +87,17 @@ entries:
     version: 0.0.4
   gif-doggo-status:
   - apiVersion: v2
-    appversion: 0.0.4
-    created: "2022-12-11T13:58:41.3002909+04:00"
+    appVersion: 0.0.4
+    created: "2022-12-12T00:42:23.4227516+04:00"
     dependencies:
     - name: app-template
       repository: https://dtsulik.github.io
       version: 0.0.4
     description: Microservice for getting doggo request status
-    digest: 8f6f14b130d03c3c254468b8023818f2699a69873474b0214d9c6891e00ed735
+    digest: b2501658a0eeb312831030363ca724ea5b7275c7f6f2c9bcda05e869b99f32af
     name: gif-doggo-status
     type: application
     urls:
     - charts/gif-doggo-status-0.0.4.tgz
     version: 0.0.4
-  redis:
-  - annotations:
-      category: Database
-    apiVersion: v2
-    appVersion: 7.0.5
-    created: "2022-12-11T13:58:41.3081241+04:00"
-    dependencies:
-    - name: common
-      repository: https://charts.bitnami.com/bitnami
-      tags:
-      - bitnami-common
-      version: 2.x.x
-    description: Redis(R) is an open source, advanced key-value store. It is often
-      referred to as a data structure server since keys can contain strings, hashes,
-      lists, sets and sorted sets.
-    digest: 2a410a35bade6c56567cd93cb6748fbf41c5e68d771cc11693b937dacc6f9351
-    home: https://github.com/bitnami/charts/tree/main/bitnami/redis
-    icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png
-    keywords:
-    - redis
-    - keyvalue
-    - database
-    maintainers:
-    - name: Bitnami
-      url: https://github.com/bitnami/charts
-    name: redis
-    sources:
-    - https://github.com/bitnami/containers/tree/main/bitnami/redis
-    urls:
-    - charts/redis-17.3.14.tgz
-    version: 17.3.14
-generated: "2022-12-11T13:58:41.2952732+04:00"
+generated: "2022-12-12T00:42:23.4187138+04:00"

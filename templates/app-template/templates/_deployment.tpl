@@ -8,8 +8,8 @@ metadata:
   name: {{ include "app-template.fullname" . }}
   annotations:
     {{- if .Values.argocdAutoupdate.enabled }}
-    argocd-image-updater.argoproj.io/image-list: "{{ .Values.image.repository }}:{{ .Values.argocdAutoupdate.tag }}"
-    argocd-image-updater.argoproj.io/{{ .Values.image.repository }}.update-strategy: {{ .Values.argocdAutoupdate.strategy }}
+    argocd-image-updater.argoproj.io/image-list: {{ .Values.argocdAutoupdate.imageAlias }}={{ .Values.image.repository }}:{{ .Values.argocdAutoupdate.tag }}
+    argocd-image-updater.argoproj.io/{{ .Values.argocdAutoupdate.imageAlias }}.update-strategy: {{ .Values.argocdAutoupdate.strategy }}
     {{- end }}
   labels:
     {{- include "app-template.labels" . | nindent 4 }}
