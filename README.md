@@ -18,8 +18,9 @@ CICD is done with Dagger in Golang. Deployment will be done with either talking 
 
 ## TODO
 - All services are missing structured reponse
-- All services are missing metrics
-- All services are missing tracing
+- Add semantic release to dagger code, now it's just pushin to `latest`
+- All services are missing metrics (done for one service)
+- All services are missing tracing (done to some extent)
 
 ## MISC
 
