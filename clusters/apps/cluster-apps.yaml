@@ -20,6 +20,8 @@ spec:
               project: default
   template:
     metadata:
+      annotations:
+        argocd-image-updater.argoproj.io/image-list: nginx
       name: '{{path.basename}}-{{cluster}}'
     spec:
       syncPolicy:
