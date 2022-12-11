@@ -19,7 +19,7 @@ import (
 )
 
 var redis_client *redis.Client
-var tracer_name = "doggo-intake"
+var tracer_name = "doggo-output"
 
 func init() {
 	redis_client = redis.NewClient(&redis.Options{
