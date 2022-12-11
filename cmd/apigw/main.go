@@ -45,6 +45,7 @@ func main() {
 
 		switch {
 		case request.Method == "GET" && request.URL.Path == "/status":
+			logger.Infow("Getting status", "url", status_ep)
 			req, _ := http.NewRequestWithContext(ctx, "GET", status_ep, nil)
 			resp, err := http_client.Do(req)
 			defer resp.Body.Close()
