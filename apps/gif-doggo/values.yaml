@@ -13,28 +13,46 @@ redis:
 gif-doggo-apigw:
   enabled: true
   env: *envs
+  argocdAutoupdate:
+    enabled: true
+    tag: any
 gif-doggo-intake:
   enabled: true
   env: *envs
   ingress:
     enabled: false
+  argocdAutoupdate:
+    enabled: true
+    tag: any
 gif-doggo-output:
   enabled: true
   env: *envs
   ingress:
     enabled: false
+  argocdAutoupdate:
+    enabled: true
+    tag: any
 gif-doggo-process:
   enabled: true
   env: *envs
   ingress:
     enabled: false
+  argocdAutoupdate:
+    enabled: true
+    tag: any
 gif-doggo-request:
   enabled: true
   env: *envs
   ingress:
     enabled: false
+  argocdAutoupdate:
+    enabled: true
+    tag: any
 gif-doggo-status:
   enabled: true
   env: *envs
   ingress:
     enabled: false
+  argocdAutoupdate:
+    enabled: true
+    tag: any
