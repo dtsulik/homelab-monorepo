@@ -14,17 +14,17 @@ gif-doggo-apigw:
   enabled: false
   env: *envs
 gif-doggo-intake:
-  enabled: true
+  enabled: false
   env: *envs
 gif-doggo-output:
-  enabled: true
+  enabled: false
   env: *envs
 gif-doggo-process:
-  enabled: true
+  enabled: false
   env: *envs
 gif-doggo-request:
-  enabled: true
+  enabled: false
   env: *envs
 gif-doggo-status:
-  enabled: true
+  enabled: false
   env: *envs
