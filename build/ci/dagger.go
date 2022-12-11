@@ -97,7 +97,7 @@ func publish(name, artifact_dir string) error {
 
 	cn, err := client.Container().
 		Build(src).
-		Publish(ctx, name, dagger.ContainerPublishOpts{})
+		Publish(ctx, name+":master", dagger.ContainerPublishOpts{})
 
 	if err != nil {
 		return err
