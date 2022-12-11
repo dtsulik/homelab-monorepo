@@ -17,7 +17,9 @@ func JaegerTraceProvider(name, url string) (*tracesdk.TracerProvider, error) {
 	resources, err := resource.New(context.Background(),
 		resource.WithFromEnv(),
 		resource.WithProcess(),
-		semconv.ServiceNameKey.String(name))
+		resource.WithAttributes(
+			semconv.ServiceNameKey.String(name)))
+
 	if err != nil {
 		return nil, err
 	}
