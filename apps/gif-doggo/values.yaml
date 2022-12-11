@@ -15,7 +15,7 @@ gif-doggo-apigw:
   env: *envs
   argocdAutoupdate:
     enabled: true
-    tag: any
+    tag: regexp:latest
 gif-doggo-intake:
   enabled: true
   env: *envs
@@ -23,7 +23,7 @@ gif-doggo-intake:
     enabled: false
   argocdAutoupdate:
     enabled: true
-    tag: any
+    tag: regexp:latest
 gif-doggo-output:
   enabled: true
   env: *envs
@@ -31,7 +31,7 @@ gif-doggo-output:
     enabled: false
   argocdAutoupdate:
     enabled: true
-    tag: any
+    tag: regexp:latest
 gif-doggo-process:
   enabled: true
   env: *envs
@@ -39,7 +39,7 @@ gif-doggo-process:
     enabled: false
   argocdAutoupdate:
     enabled: true
-    tag: any
+    tag: regexp:latest
 gif-doggo-request:
   enabled: true
   env: *envs
@@ -47,7 +47,7 @@ gif-doggo-request:
     enabled: false
   argocdAutoupdate:
     enabled: true
-    tag: any
+    tag: regexp:latest
 gif-doggo-status:
   enabled: true
   env: *envs
@@ -55,4 +55,4 @@ gif-doggo-status:
     enabled: false
   argocdAutoupdate:
     enabled: true
-    tag: any
+    tag: regexp:latest
