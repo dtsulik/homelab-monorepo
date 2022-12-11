@@ -16,6 +16,7 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/propagation"
 )
 
 var redis_client *redis.Client
@@ -40,7 +41,7 @@ func main() {
 	}
 
 	otel.SetTracerProvider(tp)
-	// otel.SetTextMapPropagator(propagation.TraceContext{})
+	otel.SetTextMapPropagator(propagation.TraceContext{})
 
 	logger.Infow("Starting server", "port", 80)
 	http.HandleFunc("/readyz", func(w http.ResponseWriter, request *http.Request) {})
