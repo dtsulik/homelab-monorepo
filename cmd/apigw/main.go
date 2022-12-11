@@ -43,6 +43,8 @@ func main() {
 		span.SetAttributes(attribute.String("url", request.URL.String()))
 		span.SetAttributes(attribute.String("method", request.Method))
 
+		logger.Infow("Handling api request.", "ep", request.URL.Path)
+
 		switch {
 		case request.Method == "GET" && request.URL.Path == "/status":
 			logger.Infow("Getting status", "url", status_ep)
