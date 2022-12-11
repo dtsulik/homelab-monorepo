@@ -32,5 +32,5 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Run Dagger
-      working-directory: ./build/ci
+      working-directory: ./ci
       run: go run dagger.go

@@ -13,7 +13,7 @@ import (
 var services = []string{"apigw", "intake", "output", "process", "request", "status"}
 
 func main() {
-	os.Chdir("../../")
+	os.Chdir("../")
 	parent_dir, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
@@ -25,7 +25,7 @@ func main() {
 
 		target_dir := "cmd/" + service
 
-		outpath := parent_dir + "/build/ci/"
+		outpath := parent_dir + "/ci/"
 		err = os.MkdirAll(outpath, os.ModePerm)
 		if err != nil {
 			log.Fatal(err)
