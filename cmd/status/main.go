@@ -16,6 +16,7 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/propagation"
 )
 
 var redis_client *redis.Client
@@ -40,7 +41,7 @@ func main() {
 	}
 
 	otel.SetTracerProvider(tp)
-	// otel.SetTextMapPropagator(propagation.TraceContext{})
+	otel.SetTextMapPropagator(propagation.TraceContext{})
 
 	logger.Infow("Starting server", "port", 80)
 	http.HandleFunc("/readyz", func(w http.ResponseWriter, request *http.Request) {})
@@ -55,26 +56,23 @@ func main() {
 	}
 }
 
-type status struct {
-	Status string `json:"status"`
-}
+type status struct{}
 
 func (s status) ServeHTTP(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 	ctx := request.Context()
-	// ctx = propagation.TraceContext{}.Extract(ctx, propagation.HeaderCarrier(request.Header))
 	ctx, span := otel.Tracer(tracer_name).Start(ctx, "validate-status-request")
 	defer span.End()
 
 	logger.Infow("Received request", "method", request.Method, "url", request.URL)
 	uid := request.URL.Query().Get("uid")
-	status := provide_status(ctx, uid)
+	status := s.retrieve(ctx, uid)
 	w.Header().Set("Content-Type", "application/json")
 	// TODO json marhsal
 	fmt.Fprintf(w, `{"status": "%s"}`, status)
 }
 
-func provide_status(ctx context.Context, uid string) string {
+func (status) retrieve(ctx context.Context, uid string) string {
 	_, span := otel.Tracer(tracer_name).Start(ctx, "retrieve-status")
 	defer span.End()
 
