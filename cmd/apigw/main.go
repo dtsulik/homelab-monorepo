@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"net/http"
 	_ "net/http/pprof"
 
@@ -13,7 +14,10 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 )
 
-var tracer_name = "doggo-apigw"
+var (
+	tracer_name = "doggo-apigw"
+	status_ep   = helpers.GetEnv("STATUS_ENDPOINT", "http://gif-doggo-status")
+)
 
 func main() {
 	tc_ep := helpers.GetEnv("TRACECOLLECTOR_ENDPOINT", "http://jaeger:14268/api/traces")
@@ -25,6 +29,7 @@ func main() {
 	}
 
 	otel.SetTracerProvider(tp)
+	http_client := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 
 	logger.Infow("Starting server", "port", 80)
 	http.HandleFunc("/readyz", func(w http.ResponseWriter, request *http.Request) {})
@@ -35,12 +40,26 @@ func main() {
 		ctx, span := otel.Tracer(tracer_name).Start(request.Context(), "upload")
 		defer span.End()
 
-		client := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
-		req, _ := http.NewRequestWithContext(ctx, "GET", "test/test", nil)
-		client.Do(req)
-
 		span.SetAttributes(attribute.String("url", request.URL.String()))
 		span.SetAttributes(attribute.String("method", request.Method))
+
+		switch {
+		case request.Method == "GET" && request.URL.Path == "/status":
+			req, _ := http.NewRequestWithContext(ctx, "GET", status_ep, nil)
+			resp, err := http_client.Do(req)
+			defer resp.Body.Close()
+
+			if err != nil {
+				logger.Errorw("Failed to get status", "error", err)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			w.WriteHeader(resp.StatusCode)
+			io.Copy(w, resp.Body)
+		default:
+			w.WriteHeader(http.StatusNotImplemented)
+			return
+		}
 	})
 
 	err = http.ListenAndServe(":80", nil)
