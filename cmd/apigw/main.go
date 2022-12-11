@@ -66,7 +66,7 @@ func main() {
 		}
 	})
 
-	err = http.ListenAndServe(":80", nil)
+	err = http.ListenAndServe(":80", mux)
 	if err != nil {
 		logger.Fatalw("Failed to start server", "error", err)
 	}
