@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       annotations:
-        argocd-image-updater.argoproj.io/image-list: dtsulik/gif-doggo-apigw,dtsulik/gif-doggo-intake,dtsulik/gif-doggo-output,dtsulik/gif-doggo-process,dtsulik/gif-doggo-request,dtsulik/gif-doggo-status
+        argocd-image-updater.argoproj.io/image-list: dtsulik/gif-doggo-apigw:master,dtsulik/gif-doggo-intake:master,dtsulik/gif-doggo-output:master,dtsulik/gif-doggo-process:master,dtsulik/gif-doggo-request:master,dtsulik/gif-doggo-status:master
         argocd-image-updater.argoproj.io/update-strategy: digest
         argocd-image-updater.argoproj.io/allow-tags: regexp:master
       name: '{{path.basename}}-{{cluster}}'
