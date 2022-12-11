@@ -29,3 +29,5 @@ gif-doggo-request:
 gif-doggo-status:
   enabled: true
   env: *envs
+  ingress:
+    enabled: false
