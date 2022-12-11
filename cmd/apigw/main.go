@@ -57,6 +57,7 @@ func main() {
 				return
 			}
 			w.WriteHeader(resp.StatusCode)
+			w.Header().Set("Content-Type", resp.Header.Get("Content-Type"))
 			io.Copy(w, resp.Body)
 		default:
 			w.WriteHeader(http.StatusNotImplemented)
