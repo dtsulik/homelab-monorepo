@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       annotations:
-        argocd-image-updater.argoproj.io/image-list: gif-doggo-apigw,gif-doggo-intake,gif-doggo-output,gif-doggo-process,gif-doggo-request,gif-doggo-status
+        argocd-image-updater.argoproj.io/image-list: dtsulik/gif-doggo-apigw,dtsulik/gif-doggo-intake,dtsulik/gif-doggo-output,dtsulik/gif-doggo-process,dtsulik/gif-doggo-request,dtsulik/gif-doggo-status
       name: '{{path.basename}}-{{cluster}}'
     spec:
       syncPolicy:
