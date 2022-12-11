@@ -37,7 +37,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, request *http.Request) {
 		defer request.Body.Close()
 
-		ctx, span := otel.Tracer(tracer_name).Start(request.Context(), "upload")
+		ctx, span := otel.Tracer(tracer_name).Start(request.Context(), "apigw-request")
 		defer span.End()
 
 		span.SetAttributes(attribute.String("url", request.URL.String()))
