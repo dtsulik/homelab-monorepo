@@ -41,11 +41,14 @@ func main() {
 	}
 
 	otel.SetTracerProvider(tp)
+	otel.SetTextMapPropagator(propagation.TraceContext{})
 
 	logger.Infow("Starting server", "port", 80)
 	http.HandleFunc("/readyz", func(w http.ResponseWriter, request *http.Request) {})
 	http.HandleFunc("/livez", func(w http.ResponseWriter, request *http.Request) {})
-	http.Handle("/", otelhttp.NewHandler(status{}, "status", otelhttp.WithTracerProvider(tp)))
+	http.Handle("/", otelhttp.NewHandler(
+		status{}, "status",
+		otelhttp.WithTracerProvider(tp)))
 
 	err = http.ListenAndServe(":80", nil)
 	if err != nil {
@@ -59,9 +62,9 @@ type status struct {
 
 func (s status) ServeHTTP(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
-
-	ctx, span := otel.Tracer(tracer_name).Start(request.Context(), "receive-status-request")
-	ctx = propagation.TraceContext{}.Extract(ctx, propagation.HeaderCarrier(request.Header))
+	ctx := request.Context()
+	// ctx = propagation.TraceContext{}.Extract(ctx, propagation.HeaderCarrier(request.Header))
+	ctx, span := otel.Tracer(tracer_name).Start(ctx, "validate-status-request")
 	defer span.End()
 
 	logger.Infow("Received request", "method", request.Method, "url", request.URL)
