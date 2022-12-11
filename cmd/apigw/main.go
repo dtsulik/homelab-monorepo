@@ -29,7 +29,6 @@ func main() {
 	}
 
 	otel.SetTracerProvider(tp)
-	http_client := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 
 	logger.Infow("Starting server", "port", 80)
 	mux := http.NewServeMux()
@@ -49,8 +48,7 @@ func main() {
 		switch {
 		case request.Method == "GET" && request.URL.Path == "/status":
 			logger.Infow("Getting status", "url", status_ep)
-			req, _ := http.NewRequestWithContext(ctx, "GET", status_ep, nil)
-			resp, err := http_client.Do(req)
+			resp, err := otelhttp.Get(ctx, status_ep)
 			defer resp.Body.Close()
 
 			if err != nil {
