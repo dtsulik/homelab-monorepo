@@ -32,9 +32,10 @@ func main() {
 	http_client := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 
 	logger.Infow("Starting server", "port", 80)
-	http.HandleFunc("/readyz", func(w http.ResponseWriter, request *http.Request) {})
-	http.HandleFunc("/livez", func(w http.ResponseWriter, request *http.Request) {})
-	http.HandleFunc("/", func(w http.ResponseWriter, request *http.Request) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/readyz", func(w http.ResponseWriter, request *http.Request) {})
+	mux.HandleFunc("/livez", func(w http.ResponseWriter, request *http.Request) {})
+	mux.HandleFunc("/", func(w http.ResponseWriter, request *http.Request) {
 		defer request.Body.Close()
 
 		ctx, span := otel.Tracer(tracer_name).Start(request.Context(), "apigw-request")
