@@ -12,6 +12,7 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
+	"golang.org/x/exp/slices"
 )
 
 var (
@@ -51,6 +52,20 @@ func main() {
 
 type apigw struct{}
 
+type ep struct {
+	methods []string
+	path    string
+	host    string
+}
+
+var endpoints = map[string]ep{
+	"status": {
+		methods: []string{"GET"},
+		path:    "/status",
+		host:    status_ep,
+	},
+}
+
 func (apigw) ServeHTTP(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 
@@ -58,24 +73,28 @@ func (apigw) ServeHTTP(w http.ResponseWriter, request *http.Request) {
 
 	ctx := request.Context()
 
-	switch {
-	case request.Method == "GET" && request.URL.Path == "/status":
-		logger.Infow("Getting status", "url", status_ep)
-		req, _ := http.NewRequestWithContext(ctx, "GET", status_ep, nil)
-		resp, err := http_client.Do(req)
+	for _, ep := range endpoints {
+		if slices.Contains(ep.methods, request.Method) && request.URL.Path == ep.path {
+			req, _ := http.NewRequestWithContext(ctx, request.Method, request.URL.Path, nil)
+			resp, err := http_client.Do(req)
+			if err != nil {
+				logger.Errorw("Failed to reach endpoint handler",
+					"path", request.URL.Path,
+					"method", request.Method,
+					"handler", ep.host,
+					"error", err)
 
-		defer resp.Body.Close()
-
-		if err != nil {
-			logger.Errorw("Failed to get status", "error", err)
-			w.WriteHeader(http.StatusInternalServerError)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			w.WriteHeader(resp.StatusCode)
+			w.Header().Set("Content-Type", resp.Header.Get("Content-Type"))
+			io.Copy(w, resp.Body)
+			return
+		} else {
+			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
 		}
-		w.WriteHeader(resp.StatusCode)
-		w.Header().Set("Content-Type", resp.Header.Get("Content-Type"))
-		io.Copy(w, resp.Body)
-	default:
-		w.WriteHeader(http.StatusNotImplemented)
-		return
 	}
+	w.WriteHeader(http.StatusNotImplemented)
 }
