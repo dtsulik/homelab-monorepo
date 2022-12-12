@@ -19,7 +19,7 @@ var (
 	tracer_name = "doggo-apigw"
 	status_ep   = helpers.GetEnv("STATUS_ENDPOINT", "http://gif-doggo-status")
 	intake_ep   = helpers.GetEnv("INTAKE_ENDPOINT", "http://gif-doggo-intake")
-	random_ep   = helpers.GetEnv("RANDOM_ENDPOINT", "http://gif-doggo-random")
+	// random_ep   = helpers.GetEnv("RANDOM_ENDPOINT", "http://gif-doggo-random")
 	http_client *http.Client
 )
 
@@ -74,12 +74,13 @@ var endpoints = map[string]ep{
 		host:    intake_ep,
 		auth:    true,
 	},
-	"random": {
-		methods: []string{"GET"},
-		path:    "/random",
-		host:    random_ep,
-		auth:    false,
-	},
+
+	// "random": {
+	// 	methods: []string{"GET"},
+	// 	path:    "/random",
+	// 	host:    random_ep,
+	// 	auth:    false,
+	// },
 }
 
 func (apigw) ServeHTTP(w http.ResponseWriter, request *http.Request) {
@@ -91,7 +92,7 @@ func (apigw) ServeHTTP(w http.ResponseWriter, request *http.Request) {
 
 	for _, ep := range endpoints {
 		if slices.Contains(ep.methods, request.Method) && request.URL.Path == ep.path {
-			req, _ := http.NewRequestWithContext(ctx, request.Method, request.URL.Path, nil)
+			req, _ := http.NewRequestWithContext(ctx, request.Method, ep.host, nil)
 			resp, err := http_client.Do(req)
 			if err != nil {
 				logger.Errorw("Failed to reach endpoint handler.",
