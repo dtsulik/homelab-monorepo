@@ -1,0 +1,7 @@
+
+ingress:
+  enabled: true
+  path: /
+  pathType: Prefix
+  hosts:
+    - k8s-grafana.local
