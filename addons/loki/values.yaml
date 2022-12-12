@@ -4,3 +4,5 @@ loki-simple-scalable:
       replication_factor: 1
     storage:
       type: 'filesystem'
+    limits_config:
+      retention_period: 6h
