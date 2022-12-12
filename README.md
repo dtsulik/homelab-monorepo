@@ -53,4 +53,3 @@ kind create cluster --config=kind.yaml
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
 ```
 
-
