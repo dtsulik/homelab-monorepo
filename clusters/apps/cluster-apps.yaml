@@ -20,10 +20,10 @@ spec:
               project: default
   template:
     metadata:
-      annotations:
-        argocd-image-updater.argoproj.io/image-list: dtsulik/gif-doggo-apigw:latest,dtsulik/gif-doggo-intake:latest,dtsulik/gif-doggo-output:latest,dtsulik/gif-doggo-process:latest,dtsulik/gif-doggo-request:latest,dtsulik/gif-doggo-status:latest
-        argocd-image-updater.argoproj.io/update-strategy: digest
-        argocd-image-updater.argoproj.io/allow-tags: regexp:latest
+      # annotations:
+      #   argocd-image-updater.argoproj.io/image-list: dtsulik/gif-doggo-apigw:latest,dtsulik/gif-doggo-intake:latest,dtsulik/gif-doggo-output:latest,dtsulik/gif-doggo-process:latest,dtsulik/gif-doggo-request:latest,dtsulik/gif-doggo-status:latest
+      #   argocd-image-updater.argoproj.io/update-strategy: digest
+      #   argocd-image-updater.argoproj.io/allow-tags: regexp:latest
       name: '{{path.basename}}-{{cluster}}'
     spec:
       syncPolicy:
