@@ -19,7 +19,7 @@ import (
 )
 
 var redis_client *redis.Client
-var tracer_name = "doggo-output"
+var tracer_name = "doggo-random"
 
 func init() {
 	redis_client = redis.NewClient(&redis.Options{
@@ -54,17 +54,12 @@ func main() {
 func handle_root(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 
-	ctx, span := otel.Tracer(tracer_name).Start(context.TODO(), "gif-download-request")
+	ctx, span := otel.Tracer(tracer_name).Start(context.TODO(), "random-file-request")
 	defer span.End()
 
 	logger.Infow("Received request", "method", request.Method, "url", request.URL)
-	if _, ok := request.Header["Filename"]; !ok {
-		logger.Errorw("Filename header not found")
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
 
-	file, err := retrieve_file(ctx, request.Header.Get("Filename"))
+	file, err := retrieve_file(ctx)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
@@ -78,17 +73,18 @@ func handle_root(w http.ResponseWriter, request *http.Request) {
 }
 
 // TODO - replace with minio
-func retrieve_file(ctx context.Context, image_key string) (io.Reader, error) {
-	_, span := otel.Tracer(tracer_name).Start(ctx, "file-retreival")
+func retrieve_file(ctx context.Context) (io.Reader, error) {
+	_, span := otel.Tracer(tracer_name).Start(ctx, "random-file-retreival")
 	defer span.End()
 
-	image_body, err := redis_client.Get(ctx, image_key).Bytes()
+	rnd := redis_client.RandomKey(ctx).String()
+	image_body, err := redis_client.Get(ctx, rnd).Bytes()
 	if err != nil {
-		logger.Errorw("Failed to retrieve file", "filename", image_key, "error", err)
+		logger.Errorw("Failed to retrieve file", "filename", rnd, "error", err)
 		return nil, err
 	}
 
-	span.SetAttributes(attribute.String("request.filename", image_key))
+	span.SetAttributes(attribute.String("request.filename", rnd))
 	span.SetAttributes(attribute.Int("request.filesize", len(image_body)))
 
 	return bytes.NewReader(image_body), nil

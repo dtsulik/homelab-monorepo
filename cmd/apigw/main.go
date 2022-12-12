@@ -18,6 +18,8 @@ import (
 var (
 	tracer_name = "doggo-apigw"
 	status_ep   = helpers.GetEnv("STATUS_ENDPOINT", "http://gif-doggo-status")
+	intake_ep   = helpers.GetEnv("INTAKE_ENDPOINT", "http://gif-doggo-intake")
+	random_ep   = helpers.GetEnv("RANDOM_ENDPOINT", "http://gif-doggo-random")
 	http_client *http.Client
 )
 
@@ -56,6 +58,7 @@ type ep struct {
 	methods []string
 	path    string
 	host    string
+	auth    bool
 }
 
 var endpoints = map[string]ep{
@@ -63,6 +66,19 @@ var endpoints = map[string]ep{
 		methods: []string{"GET"},
 		path:    "/status",
 		host:    status_ep,
+		auth:    false,
+	},
+	"intake": {
+		methods: []string{"POST"},
+		path:    "/intake",
+		host:    intake_ep,
+		auth:    true,
+	},
+	"random": {
+		methods: []string{"GET"},
+		path:    "/random",
+		host:    random_ep,
+		auth:    false,
 	},
 }
 

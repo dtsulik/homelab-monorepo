@@ -10,7 +10,7 @@ import (
 )
 
 // List of files modification of which should trigger rebuild
-var services = []string{"apigw", "intake", "output", "process", "request", "status"}
+var services = []string{"apigw", "intake", "output", "process", "request", "random", "status"}
 
 func main() {
 	os.Chdir("../")
