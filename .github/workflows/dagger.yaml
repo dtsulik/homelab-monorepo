@@ -34,3 +34,5 @@ jobs:
     - name: Run Dagger
       working-directory: ./ci
       run: go run dagger.go
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

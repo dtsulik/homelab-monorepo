@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"dagger/git"
 	"fmt"
 	"log"
 	"os"
@@ -13,6 +14,12 @@ import (
 var services = []string{"apigw", "intake", "output", "process", "request", "random", "status"}
 
 func main() {
+	r, _ := git.GetRepo()
+	git.GetCommit(r)
+
+	git.ReadCharts()
+	os.Exit(0)
+
 	os.Chdir("../")
 	parent_dir, err := os.Getwd()
 	if err != nil {
@@ -21,7 +28,7 @@ func main() {
 
 	name_prefix := "dtsulik/gif-doggo-"
 	for _, service := range services {
-		fmt.Println("Building and publishing " + service)
+		log.Println("Building and publishing " + service)
 
 		target_dir := "cmd/" + service
 
