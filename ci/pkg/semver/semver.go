@@ -22,6 +22,7 @@ func (v Semver) String() string {
 	return string(v)
 }
 
+// TODO add support
 func (v Semver) BumpVersion(vpos VersionPosition) Semver {
 	re := regexp.MustCompile(semver_regex)
 
@@ -50,8 +51,11 @@ func (v Semver) BumpVersion(vpos VersionPosition) Semver {
 	switch vpos {
 	case Major:
 		vmajor += 1
+		vminor = 0
+		vpatch = 0
 	case Minor:
 		vminor += 1
+		vpatch = 0
 	case Patch:
 		vpatch += 1
 	}
