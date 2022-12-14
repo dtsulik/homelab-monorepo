@@ -11,19 +11,28 @@ import (
 )
 
 func TestChart() {
+	f, err := os.Open("Chart2.yaml")
+	if err != nil {
+		return
+	}
+	defer f.Close()
+
 	c := HelmChart{}
-	err := c.Read("Chart.yaml")
+
+	err = c.Read(f)
 	if err != nil {
 		fmt.Println(err)
 	}
-	deps := c.dependencies()
-	for i, dep := range *deps {
+
+	dep := c.Dependency("app-template")
+	if dep != nil {
 		dep.Version = semver.Semver(dep.Version).BumpVersion(semver.Patch).String()
-		(*deps)[i] = dep
 	}
 	c.Version = semver.Semver(c.Version).BumpVersion(semver.Patch).String()
-	c.dump(os.Stdout)
-	c.Write("Chart.yaml")
+	f.Truncate(0)
+	f.Seek(0, 0)
+	c.Write(os.Stdout)
+	c.Write(f)
 }
 
 type HelmChartDependency struct {
@@ -42,14 +51,19 @@ type HelmChart struct {
 	Dependencies []HelmChartDependency `yaml:"dependencies"`
 }
 
-func (c *HelmChart) Read(file string) error {
-	f, err := os.Open(file)
-	if err != nil {
-		return err
+func (c *HelmChart) Dependency(name string) *HelmChartDependency {
+	deps := c.dependencies()
+	for i, dep := range *deps {
+		if dep.Name == name {
+			return &(*deps)[i]
+		}
 	}
-	defer f.Close()
+	return nil
+}
 
-	data, err := io.ReadAll(f)
+func (c *HelmChart) Read(r io.Reader) error {
+
+	data, err := io.ReadAll(r)
 	if err != nil {
 		return err
 	}
@@ -61,26 +75,17 @@ func (c *HelmChart) Read(file string) error {
 	return nil
 }
 
-func (c *HelmChart) dump(d *os.File) {
-	io.WriteString(d, fmt.Sprintln(c))
-}
-
 func (c *HelmChart) dependencies() *[]HelmChartDependency {
 	return &c.Dependencies
 }
 
-func (c *HelmChart) Write(file string) error {
+func (c *HelmChart) Write(w io.Writer) error {
 	d, err := yaml.Marshal(c)
 	if err != nil {
 		return err
 	}
-	f, err := os.OpenFile(file, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0755)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
 
-	_, err = f.Write(d)
+	_, err = w.Write(d)
 	if err != nil {
 		return err
 	}

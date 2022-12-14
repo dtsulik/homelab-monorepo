@@ -1,0 +1,18 @@
+apiVersion: v2
+appVersion: 0.0.4
+description: Microservice stack for generating doggos
+name: gif-doggo
+version: 0.0.38
+dependencies:
+    - name: app-template
+      version: 0.0.18
+      repository: file://../library/app-template/
+      condition: ""
+    - name: gif-doggo-status
+      version: 0.0.14
+      repository: file://../micro-services/status/
+      condition: gif-doggo-status.enabled
+    - name: redis
+      version: 17.3.24
+      repository: https://charts.bitnami.com/bitnami
+      condition: redis.enabled
