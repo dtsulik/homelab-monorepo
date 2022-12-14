@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"dagger/git"
+	"dagger/pkg/git"
+	"dagger/pkg/helm"
 	"fmt"
 	"log"
 	"os"
@@ -14,10 +15,13 @@ import (
 var services = []string{"apigw", "intake", "output", "process", "request", "random", "status"}
 
 func main() {
-	r, _ := git.GetRepo()
-	git.GetCommit(r)
+	files, err := git.GetChangedFiles()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("Changed files:", files)
 
-	git.ReadCharts()
+	helm.TestChart()
 	os.Exit(0)
 
 	os.Chdir("../")

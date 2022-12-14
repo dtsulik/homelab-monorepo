@@ -1,38 +1,38 @@
 apiVersion: v2
 appVersion: 0.0.4
-dependencies:
-    - name: app-template
-      repository: file://../library/app-template/
-      version: 0.0.4
-    - condition: gif-doggo-apigw.enabled
-      name: gif-doggo-apigw
-      repository: file://../micro-services/apigw/
-      version: 0.0.4
-    - condition: gif-doggo-intake.enabled
-      name: gif-doggo-intake
-      repository: file://../micro-services/intake/
-      version: 0.0.4
-    - condition: gif-doggo-output.enabled
-      name: gif-doggo-output
-      repository: file://../micro-services/output/
-      version: 0.0.4
-    - condition: gif-doggo-process.enabled
-      name: gif-doggo-process
-      repository: file://../micro-services/process/
-      version: 0.0.4
-    - condition: gif-doggo-request.enabled
-      name: gif-doggo-request
-      repository: file://../micro-services/request/
-      version: 0.0.4
-    - condition: gif-doggo-status.enabled
-      name: gif-doggo-status
-      repository: file://../micro-services/status/
-      version: 0.0.4
-    - condition: redis.enabled
-      name: redis
-      repository: https://charts.bitnami.com/bitnami
-      version: 17.3.14
 description: Microservice stack for generating doggos
 name: gif-doggo
-type: application
-version: 0.0.16
+version: 0.0.34
+dependencies:
+    - name: app-template
+      version: 0.0.14
+      repository: file://../library/app-template/
+      condition: ""
+    - name: gif-doggo-apigw
+      version: 0.0.14
+      repository: file://../micro-services/apigw/
+      condition: gif-doggo-apigw.enabled
+    - name: gif-doggo-intake
+      version: 0.0.14
+      repository: file://../micro-services/intake/
+      condition: gif-doggo-intake.enabled
+    - name: gif-doggo-output
+      version: 0.0.14
+      repository: file://../micro-services/output/
+      condition: gif-doggo-output.enabled
+    - name: gif-doggo-process
+      version: 0.0.14
+      repository: file://../micro-services/process/
+      condition: gif-doggo-process.enabled
+    - name: gif-doggo-request
+      version: 0.0.14
+      repository: file://../micro-services/request/
+      condition: gif-doggo-request.enabled
+    - name: gif-doggo-status
+      version: 0.0.14
+      repository: file://../micro-services/status/
+      condition: gif-doggo-status.enabled
+    - name: redis
+      version: 17.3.24
+      repository: https://charts.bitnami.com/bitnami
+      condition: redis.enabled
