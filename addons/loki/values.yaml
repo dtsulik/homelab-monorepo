@@ -2,7 +2,17 @@ loki-simple-scalable:
   loki:
     commonConfig:
       replication_factor: 1
+    auth_enabled: false
     storage:
       type: 'filesystem'
     limits_config:
       retention_period: 6h
+    test:
+      enabled: false
+    monitoring:
+      selfMonitoring:
+        enabled: false
+        grafanaAgent:
+          installOperator: false
+        lokiCanary:
+          enabled: false
