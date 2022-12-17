@@ -2,10 +2,10 @@ apiVersion: v2
 appVersion: 0.0.4
 description: Microservice stack for generating doggos
 name: gif-doggo
-version: 0.0.38
+version: 0.0.42
 dependencies:
     - name: app-template
-      version: 0.0.18
+      version: 0.0.22
       repository: file://../library/app-template/
       condition: ""
     - name: gif-doggo-status

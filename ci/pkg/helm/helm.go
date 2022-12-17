@@ -1,7 +1,6 @@
 package helm
 
 import (
-	"fmt"
 	"io"
 	"os"
 
@@ -11,9 +10,10 @@ import (
 )
 
 func TestChart() {
-	f, err := os.Open("Chart2.yaml")
+
+	f, err := os.OpenFile("Chart2.yaml", os.O_RDWR|os.O_CREATE, 0755)
 	if err != nil {
-		return
+		panic(err)
 	}
 	defer f.Close()
 
@@ -21,7 +21,7 @@ func TestChart() {
 
 	err = c.Read(f)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 
 	dep := c.Dependency("app-template")
@@ -29,10 +29,17 @@ func TestChart() {
 		dep.Version = semver.Semver(dep.Version).BumpVersion(semver.Patch).String()
 	}
 	c.Version = semver.Semver(c.Version).BumpVersion(semver.Patch).String()
-	f.Truncate(0)
-	f.Seek(0, 0)
 	c.Write(os.Stdout)
-	c.Write(f)
+
+	err = f.Truncate(0)
+	if err != nil {
+		panic(err)
+	}
+	f.Seek(0, 0)
+	err = c.Write(f)
+	if err != nil {
+		panic(err)
+	}
 }
 
 type HelmChartDependency struct {
@@ -73,6 +80,14 @@ func (c *HelmChart) Read(r io.Reader) error {
 		return err
 	}
 	return nil
+}
+
+func (c *HelmChart) String() string {
+	d, err := yaml.Marshal(c)
+	if err != nil {
+		return "error"
+	}
+	return string(d)
 }
 
 func (c *HelmChart) dependencies() *[]HelmChartDependency {
