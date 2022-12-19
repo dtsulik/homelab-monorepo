@@ -4,7 +4,7 @@ import (
 	"io"
 	"os"
 
-	"dagger/pkg/semver"
+	"ci/pkg/semver"
 
 	"gopkg.in/yaml.v3"
 )
@@ -51,7 +51,6 @@ type HelmChartDependency struct {
 
 type HelmChart struct {
 	ApiVersion   string                `yaml:"apiVersion"`
-	AppVersion   string                `yaml:"appVersion"`
 	Description  string                `yaml:"description"`
 	Name         string                `yaml:"name"`
 	Version      string                `yaml:"version"`
@@ -66,6 +65,21 @@ func (c *HelmChart) Dependency(name string) *HelmChartDependency {
 		}
 	}
 	return nil
+}
+
+func NewFromFile(path string) (*HelmChart, error) {
+	f, err := os.OpenFile(path, os.O_RDONLY, 0755)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	c := &HelmChart{}
+	err = c.Read(f)
+	if err != nil {
+		return nil, err
+	}
+	return c, nil
 }
 
 func (c *HelmChart) Read(r io.Reader) error {

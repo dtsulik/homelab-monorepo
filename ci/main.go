@@ -2,11 +2,12 @@ package main
 
 import (
 	"context"
-	"dagger/pkg/git"
-	"dagger/pkg/helm"
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
+
+	"ci/internal/project"
 
 	"dagger.io/dagger"
 )
@@ -15,20 +16,21 @@ import (
 var services = []string{"apigw", "intake", "output", "process", "request", "random", "status"}
 
 func main() {
-	files, err := git.GetChangedFiles()
+	current_dir, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Changed files:", files)
+	parent_dir := filepath.Dir(current_dir)
+	// fmt.Println("Parent dir: " + parent_dir)
 
-	helm.TestChart()
+	os.Chdir("..")
+	proj, err := project.New("gif-doggo", ".")
+	if err != nil {
+		log.Fatal("Project setup failed: ", err)
+	}
+	// fmt.Println("Project setup complete:\n", proj)
+	proj.Build()
 	os.Exit(0)
-
-	os.Chdir("../")
-	parent_dir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	name_prefix := "dtsulik/gif-doggo-"
 	for _, service := range services {

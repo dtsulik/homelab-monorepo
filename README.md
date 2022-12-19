@@ -24,6 +24,8 @@ CICD is done with Dagger in Golang. Deployment will be done with either talking 
 - All services need proper models and proper use of interfaces
 - Code has mix of snake/camel case, needs to be unified
 - Where tests? 
+- Srsly where tests?
+- Fuzzing?
 
 ![prod](.docs/test-in-prod.jpg)
 
