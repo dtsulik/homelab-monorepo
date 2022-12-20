@@ -1,4 +1,4 @@
-loki-simple-scalable:
+loki:
   loki:
     commonConfig:
       replication_factor: 1
