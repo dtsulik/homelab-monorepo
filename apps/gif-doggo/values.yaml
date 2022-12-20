@@ -3,7 +3,7 @@ env: &envs
   TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
 
 redis:
-  enabled: true
+  enabled: false
   architecture: standalone
   auth:
     enabled: false
