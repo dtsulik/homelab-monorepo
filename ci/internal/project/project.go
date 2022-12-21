@@ -163,7 +163,7 @@ func (p *Project) setupServices(path string) error {
 	}
 	for _, serviceDir := range serviceDirs {
 		if serviceDir.IsDir() {
-			s, err := service.New(serviceDir.Name(), filepath.Join(path, serviceDir.Name()))
+			s, err := service.New(serviceDir.Name(), p.Path, filepath.Join(path, serviceDir.Name()))
 			if err != nil {
 				return err
 			}
@@ -184,13 +184,44 @@ func (p *Project) Build() error {
 		return err
 	}
 
+	// TODO implement filterChanges
 	_ = p.filterChanges(files)
 
-	for _, s := range p.services {
-		err := s.Build()
-		if err != nil {
+	errc := make(chan error)
+	statusc := make(chan string)
+
+	filteredServices := p.services
+
+	for _, s := range filteredServices {
+		go func(svc service.Service) {
+			a, err := svc.Artifact()
+			if err != nil {
+				errc <- err
+				return
+			}
+			err = a.Publish("docker.io/dtsulik/" + p.Name + "-" + svc.Name + ":latest")
+			if err != nil {
+				errc <- err
+				return
+			}
+
+			err = a.Cleanup()
+			if err != nil {
+				statusc <- fmt.Sprintf(`{"service": "%s", "digest": "", "state": "error", "error": "%s"}`, svc.Name, err.Error())
+			} else {
+				statusc <- fmt.Sprintf(`{"service": "%s", "digest": "%s", "state": "done", "error": ""}`, svc.Name, a.Digest)
+			}
+		}(s)
+	}
+
+	for i := 0; i < len(filteredServices); i++ {
+		select {
+		case err := <-errc:
 			return err
+		case s := <-statusc:
+			fmt.Println(s)
 		}
 	}
+
 	return nil
 }

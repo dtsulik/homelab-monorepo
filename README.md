@@ -26,6 +26,12 @@ CICD is done with Dagger in Golang. Deployment will be done with either talking 
 - Where tests? 
 - Srsly where tests?
 - Fuzzing?
+- `apigw` service should be named bff (backend for frontend)
+
+### TODO release specific todos
+- add semantic release
+- separate build and publish stages
+- add helm chart release process
 
 ![prod](.docs/test-in-prod.jpg)
 
