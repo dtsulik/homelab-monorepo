@@ -9,7 +9,7 @@ import (
 
 func main() {
 	os.Chdir("..")
-	proj, err := project.New("gif-doggo", ".")
+	proj, err := project.New("gif-doggo", "projects/gif-doggo")
 	if err != nil {
 		log.Fatal("Project setup failed: ", err)
 	}

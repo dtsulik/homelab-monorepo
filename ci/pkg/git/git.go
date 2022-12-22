@@ -52,6 +52,7 @@ func GetChangedFiles() ([]string, error) {
 	return getChanges(commits[0], commits[1])
 }
 
+// FIXME this breaks with more than 2 commits per push
 func getChanges(curr, prev *object.Commit) ([]string, error) {
 	ctree, err := curr.Tree()
 	if err != nil {
