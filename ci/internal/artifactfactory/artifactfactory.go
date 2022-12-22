@@ -25,7 +25,7 @@ type Artifact struct {
 func (a *Artifact) Publish(fullname string) error {
 	ctx := context.Background()
 
-	client, err := dagger.Connect(ctx) //, dagger.WithLogOutput(os.Stdout))
+	client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stdout))
 	if err != nil {
 		return err
 	}
