@@ -21,6 +21,8 @@ import (
 var redis_client *redis.Client
 var tracer_name = "doggo-intake"
 
+// tigger
+
 // TODO env vars here
 func init() {
 	redis_client = redis.NewClient(&redis.Options{
