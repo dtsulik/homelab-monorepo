@@ -41,7 +41,10 @@ func getCommit(r *git.Repository, lastn int) ([]*object.Commit, error) {
 }
 
 func GetChangedFiles() ([]string, error) {
-	r, _ := GetRepo()
+	r, err := GetRepo()
+	if err != nil {
+		return nil, err
+	}
 	commits, err := getCommit(r, 2)
 	if err != nil {
 		return nil, err
