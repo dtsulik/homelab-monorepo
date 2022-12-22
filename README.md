@@ -27,6 +27,7 @@ CICD is done with Dagger in Golang. Deployment will be done with either talking 
 - Srsly where tests?
 - Fuzzing?
 - `apigw` service should be named bff (backend for frontend)
+- errors need to be more structured and relevant types need custom errors/stringers
 
 ### TODO release specific todos
 - add semantic release

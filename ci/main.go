@@ -19,5 +19,4 @@ func main() {
 	if err != nil {
 		log.Fatal("Project build failed: ", err)
 	}
-	os.Exit(0)
 }

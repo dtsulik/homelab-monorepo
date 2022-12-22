@@ -183,6 +183,7 @@ func (p *Project) Build() error {
 	if err != nil {
 		return err
 	}
+	fmt.Println("changed files: ", files)
 
 	// TODO implement filterChanges
 	_ = p.filterChanges(files)
