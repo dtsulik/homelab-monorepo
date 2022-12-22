@@ -86,7 +86,7 @@ var endpoints = map[string]ep{
 func (bff) ServeHTTP(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 
-	logger.Infow("Handling api request.", "ep", request.URL.Path)
+	logger.Infow("Handling bff request.", "ep", request.URL.Path)
 
 	ctx := request.Context()
 
