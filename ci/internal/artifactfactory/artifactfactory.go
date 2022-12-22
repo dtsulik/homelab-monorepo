@@ -4,6 +4,7 @@ import (
 	"ci/internal/buildfactory"
 	"context"
 	"os"
+	"path/filepath"
 
 	"dagger.io/dagger"
 )
@@ -25,7 +26,7 @@ type Artifact struct {
 func (a *Artifact) Publish(fullname string) error {
 	ctx := context.Background()
 
-	client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stdout))
+	client, err := dagger.Connect(ctx) //, dagger.WithLogOutput(os.Stdout))
 	if err != nil {
 		return err
 	}
@@ -56,7 +57,11 @@ func (a *Artifact) Package() error {
 }
 
 func (a *Artifact) Build(parentPath, inputPath string) error {
-	a.BuildFactory.Build(parentPath, inputPath, a.Path)
+	s, e := filepath.Rel(parentPath, inputPath)
+	if e != nil {
+		return e
+	}
+	a.BuildFactory.Build(parentPath, s, a.Path)
 	return nil
 }
 

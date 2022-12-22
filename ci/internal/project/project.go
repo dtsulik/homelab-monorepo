@@ -173,7 +173,7 @@ func (p *Project) setupServices(path string) error {
 	return nil
 }
 
-// TODO aaaand generics go here
+// TODO this might need some attention
 func (p *Project) filterChanges(files []string) ([]service.Service, []Manifest) {
 	var services []service.Service
 	var manifests []Manifest
@@ -193,6 +193,9 @@ func (p *Project) filterChanges(files []string) ([]service.Service, []Manifest) 
 			if strings.HasPrefix(file, m.path) {
 				manifests = append(manifests, m)
 			}
+		}
+		if strings.HasPrefix(file, p.projectManifest.path) {
+			manifests = append(manifests, p.projectManifest)
 		}
 	}
 

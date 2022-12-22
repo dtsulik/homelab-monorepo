@@ -2,7 +2,6 @@ package golangfactory
 
 import (
 	"context"
-	"os"
 	"path/filepath"
 
 	"dagger.io/dagger"
@@ -19,7 +18,7 @@ func (g GolangFactory) Build(parentPath, targetPath, outputPath string) error {
 
 	ctx := context.Background()
 
-	client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stdout))
+	client, err := dagger.Connect(ctx) //, dagger.WithLogOutput(os.Stdout))
 	if err != nil {
 		return err
 	}

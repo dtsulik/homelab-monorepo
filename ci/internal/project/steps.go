@@ -55,15 +55,16 @@ func (p *Project) Build() error {
 	statusc := make(chan string)
 
 	fmt.Println("::group::Building services")
-	for _, s := range filteredServices {
-		go func(svc service.Service) {
+	for i := range filteredServices {
+		go func(svc *service.Service) {
 			_, err := svc.BuildArtifact()
 			if err != nil {
 				errc <- err
 				return
 			}
 			statusc <- fmt.Sprintf(`{"service": "%s", "state": "built", "error": ""}`, svc.Name)
-		}(s)
+			svc.ReadyForPublish = true
+		}(&filteredServices[i])
 	}
 
 	for i := 0; i < len(filteredServices); i++ {
@@ -74,12 +75,14 @@ func (p *Project) Build() error {
 			fmt.Println(s)
 		}
 	}
+	p.services = filteredServices
 	fmt.Println("::endgroup::")
 
 	fmt.Println("::group::Building manifests")
 	for _, m := range filteredManifests {
 		fmt.Println("changed manifest: ", m.path)
 	}
+	p.serviceManifests = filteredManifests
 	fmt.Println("::endgroup::")
 
 	return nil

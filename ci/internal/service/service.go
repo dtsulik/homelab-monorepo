@@ -32,6 +32,7 @@ func (s Service) String() string {
 
 func New(name, ppath, path string) (Service, error) {
 	// TODO build type discovery here
+
 	s := Service{
 		Name:            name,
 		Path:            path,
