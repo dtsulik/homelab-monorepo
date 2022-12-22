@@ -18,4 +18,12 @@ func main() {
 	if err != nil {
 		log.Fatal("Project build failed: ", err)
 	}
+	// err = proj.Publish()
+	// if err != nil {
+	// 	log.Fatal("Project publish failed: ", err)
+	// }
+	err = proj.Cleanup()
+	if err != nil {
+		log.Fatal("Project cleanup failed: ", err)
+	}
 }

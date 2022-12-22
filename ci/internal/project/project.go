@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
-	"ci/pkg/git"
 	"ci/pkg/helm"
 
 	"ci/internal/service"
@@ -174,116 +174,27 @@ func (p *Project) setupServices(path string) error {
 }
 
 // TODO aaaand generics go here
-func (p *Project) filterChanges(files []string) []string {
-	return files
-}
+func (p *Project) filterChanges(files []string) ([]service.Service, []Manifest) {
+	var services []service.Service
+	var manifests []Manifest
 
-// FIXME all of the channel methods have a bug where
-// if one service fails rest of go routines are not killed
-// use context to cancel all go routines in case of error
-func (p *Project) Cleanup() error {
-	errc := make(chan error)
-	statusc := make(chan string)
-
-	fmt.Println("::group::Cleaning up")
-	for _, s := range p.services {
-		go func(svc service.Service) {
-			a := svc.Artifact()
-
-			err := a.Cleanup()
-			if err != nil {
-				errc <- err
-				return
+	for _, file := range files {
+		for _, s := range p.services {
+			if strings.HasPrefix(file, s.Path) {
+				services = append(services, s)
 			}
-			statusc <- fmt.Sprintf("Cleaned up %s", svc.Name)
-		}(s)
-	}
-
-	for i := 0; i < len(p.services); i++ {
-		select {
-		case err := <-errc:
-			return err
-		case s := <-statusc:
-			fmt.Println(s)
 		}
-	}
-	fmt.Println("::endgroup::")
-	return nil
-}
-
-func (p *Project) Build() error {
-	fmt.Println("::group::Detecting changes")
-	files, err := git.GetChangedFiles()
-	if err != nil {
-		return err
-	}
-	fmt.Println("Changed files: ", files)
-	fmt.Println("::endgroup::")
-
-	// TODO implement filterChanges
-	_ = p.filterChanges(files)
-
-	errc := make(chan error)
-	statusc := make(chan string)
-
-	filteredServices := p.services
-
-	fmt.Println("::group::Building services")
-	for _, s := range filteredServices {
-		go func(svc service.Service) {
-			_, err := svc.BuildArtifact()
-			if err != nil {
-				errc <- err
-				return
+		for _, m := range p.serviceManifests {
+			if strings.HasPrefix(file, m.path) {
+				manifests = append(manifests, m)
 			}
-			statusc <- fmt.Sprintf(`{"service": "%s", "state": "built", "error": ""}`, svc.Name)
-		}(s)
-	}
-
-	for i := 0; i < len(filteredServices); i++ {
-		select {
-		case err := <-errc:
-			return err
-		case s := <-statusc:
-			fmt.Println(s)
 		}
-	}
-	fmt.Println("::endgroup::")
-
-	return nil
-}
-
-func (p *Project) Publish() error {
-	fmt.Println("::group::Publishing artifacts")
-
-	errc := make(chan error)
-	statusc := make(chan string)
-
-	filteredServices := []service.Service{}
-	for _, s := range p.services {
-		if !s.ReadyForPublish {
-			continue
-		}
-		filteredServices = append(filteredServices, s)
-		go func(svc service.Service) {
-			a := svc.Artifact()
-			err := a.Publish("docker.io/dtsulik/" + p.Name + "-" + svc.Name + ":latest")
-			if err != nil {
-				errc <- err
-				return
+		for _, m := range p.libraryManifests {
+			if strings.HasPrefix(file, m.path) {
+				manifests = append(manifests, m)
 			}
-			statusc <- fmt.Sprintf(`{"service": "%s", "digest": "%s", "state": "published", "error": ""}`, svc.Name, a.Digest)
-		}(s)
-	}
-
-	for i := 0; i < len(filteredServices); i++ {
-		select {
-		case err := <-errc:
-			return err
-		case s := <-statusc:
-			fmt.Println(s)
 		}
 	}
-	fmt.Println("::endgroup::")
-	return nil
+
+	return services, manifests
 }
