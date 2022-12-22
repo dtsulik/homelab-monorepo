@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	tracer_name = "doggo-apigw"
+	tracer_name = "doggo-bff"
 	status_ep   = helpers.GetEnv("STATUS_ENDPOINT", "http://gif-doggo-status")
 	intake_ep   = helpers.GetEnv("INTAKE_ENDPOINT", "http://gif-doggo-intake")
 	// random_ep   = helpers.GetEnv("RANDOM_ENDPOINT", "http://gif-doggo-random")
@@ -43,7 +43,7 @@ func main() {
 	mux.HandleFunc("/readyz", func(w http.ResponseWriter, request *http.Request) {})
 	mux.HandleFunc("/livez", func(w http.ResponseWriter, request *http.Request) {})
 	mux.Handle("/", otelhttp.NewHandler(
-		apigw{}, "apigw-http-request",
+		bff{}, "bff-http-request",
 		otelhttp.WithTracerProvider(tp)))
 
 	err = http.ListenAndServe(":80", mux)
@@ -52,7 +52,7 @@ func main() {
 	}
 }
 
-type apigw struct{}
+type bff struct{}
 
 type ep struct {
 	methods []string
@@ -83,7 +83,7 @@ var endpoints = map[string]ep{
 	// },
 }
 
-func (apigw) ServeHTTP(w http.ResponseWriter, request *http.Request) {
+func (bff) ServeHTTP(w http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
 
 	logger.Infow("Handling api request.", "ep", request.URL.Path)
