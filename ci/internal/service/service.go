@@ -9,10 +9,11 @@ import (
 )
 
 type Service struct {
-	Name       string
-	Path       string
-	ParentPath string
-	artifact   artifactfactory.Artifact
+	Name            string
+	Path            string
+	ParentPath      string
+	artifact        artifactfactory.Artifact
+	ReadyForPublish bool
 }
 
 type ServiceArtifact struct {
@@ -32,9 +33,10 @@ func (s Service) String() string {
 func New(name, ppath, path string) (Service, error) {
 	// TODO build type discovery here
 	s := Service{
-		Name:       name,
-		Path:       path,
-		ParentPath: ppath,
+		Name:            name,
+		Path:            path,
+		ParentPath:      ppath,
+		ReadyForPublish: false,
 		artifact: artifactfactory.Artifact{
 			Name:         name,
 			Path:         filepath.Join(os.TempDir(), name),
@@ -45,10 +47,14 @@ func New(name, ppath, path string) (Service, error) {
 	return s, nil
 }
 
-func (s Service) Artifact() (*artifactfactory.Artifact, error) {
+func (s Service) BuildArtifact() (*artifactfactory.Artifact, error) {
 	err := s.artifact.Build(s.ParentPath, s.Path)
 	if err != nil {
 		return nil, err
 	}
 	return &s.artifact, nil
+}
+
+func (s Service) Artifact() *artifactfactory.Artifact {
+	return &s.artifact
 }
