@@ -179,6 +179,7 @@ func (p *Project) filterChanges(files []string) []string {
 }
 
 func (p *Project) Build() error {
+	fmt.Println("building project")
 	files, err := git.GetChangedFiles()
 	if err != nil {
 		return err

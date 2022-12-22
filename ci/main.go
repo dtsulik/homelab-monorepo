@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -14,7 +13,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Project setup failed: ", err)
 	}
-	fmt.Println("Project setup complete:\n", proj)
+	// fmt.Println("Project setup complete:\n", proj)
 	err = proj.Build()
 	if err != nil {
 		log.Fatal("Project build failed: ", err)
