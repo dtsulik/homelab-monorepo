@@ -1,6 +1,6 @@
 apiVersion: v2
-name: gif-doggo-apigw
-description: Microservice for apigw of doggos
+name: gif-doggo-output
+description: Microservice for doggo output
 type: application
 version: 0.0.4
 appVersion: "0.0.4"
@@ -8,4 +8,4 @@ appVersion: "0.0.4"
 dependencies:
   - name: app-template
     version: 0.0.4
-    repository: "file://../../templates/app-template/"
+    repository: "file://../../library/app-template/"

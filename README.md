@@ -22,6 +22,18 @@ CICD is done with Dagger in Golang. Deployment will be done with either talking 
 - All services are missing metrics (done for one service)
 - All services are missing tracing (done to some extent)
 - All services need proper models and proper use of interfaces
+- Code has mix of snake/camel case, needs to be unified
+- Where tests? 
+- Srsly where tests?
+- Fuzzing?
+- `apigw` service should be named bff (backend for frontend)
+
+### TODO release specific todos
+- add semantic release
+- separate build and publish stages
+- add helm chart release process
+
+![prod](.docs/test-in-prod.jpg)
 
 ## MISC
 
