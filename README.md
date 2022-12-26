@@ -2,9 +2,11 @@
 
 Monorepo for pet projects and personal lab
 
+Services in the project directory are mostly are [rube-goldberg machines](https://en.wikipedia.org/wiki/Rube_Goldberg_machine). They are there only to generate some noise for telemetry or for me to learn various design things (DDD, modular monoliths, event driven architectures, etc).
+
 ## CICD
 
-CICD is done with Dagger in Golang. Deployment will be done with either talking directly to k8s api to ArgoCD api. Since this is a monorepo we can forgo the usual gitops repo and have the cicd code talk to relevant deployment API. (Still not as clean as GitOps, needs more investigation).
+CI is done in Golang most it is done with dagger.io, but I am looking to replace it. CD is done with gitops (ArgoCD).
 
 ## TODO
 - All services are missing structured reponse
@@ -16,7 +18,7 @@ CICD is done with Dagger in Golang. Deployment will be done with either talking 
 - Where tests? 
 - Srsly where tests?
 - Fuzzing?
-- `apigw` service should be named bff (backend for frontend)
+- `apigw` service should be named bff (done - now helm chart)
 - errors need to be more structured and relevant types need custom errors/stringers
 
 ### TODO release specific todos
