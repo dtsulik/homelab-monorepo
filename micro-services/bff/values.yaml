@@ -1,7 +1,7 @@
 enabled: true
 
 image:
-  repository: dtsulik/gif-doggo-apigw
+  repository: dtsulik/gif-doggo-bff
   pullPolicy: Always
   tag: latest
 

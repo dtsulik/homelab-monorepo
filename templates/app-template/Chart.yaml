@@ -2,4 +2,4 @@ apiVersion: v2
 name: app-template
 description: A library for deploying simple apps
 type: library
-version: 0.0.4
+version: 0.0.5
