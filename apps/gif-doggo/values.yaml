@@ -10,43 +10,24 @@ redis:
   master:
     persistence:
       enabled: false
-gif-doggo-apigw:
+gif-doggo-bff:
   enabled: true
   env: *envs
-  argocdAutoupdate:
-    enabled: false
 gif-doggo-intake:
   enabled: true
   env: *envs
-  ingress:
-    enabled: false
-  argocdAutoupdate:
-    enabled: false
 gif-doggo-output:
   enabled: true
   env: *envs
-  ingress:
-    enabled: false
-  argocdAutoupdate:
-    enabled: false
 gif-doggo-process:
   enabled: true
   env: *envs
-  ingress:
-    enabled: false
-  argocdAutoupdate:
-    enabled: false
 gif-doggo-request:
   enabled: true
   env: *envs
-  ingress:
-    enabled: false
-  argocdAutoupdate:
-    enabled: false
 gif-doggo-status:
   enabled: true
   env: *envs
-  ingress:
-    enabled: false
-  argocdAutoupdate:
-    enabled: false
+gif-doggo-random:
+  enabled: true
+  env: *envs

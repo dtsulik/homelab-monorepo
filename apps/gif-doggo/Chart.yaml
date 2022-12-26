@@ -2,38 +2,41 @@ apiVersion: v2
 name: gif-doggo
 description: Microservice stack for generating doggos
 type: application
-version: 0.0.4
-appVersion: "0.0.4"
+version: 0.0.6
 
 dependencies:
   - name: app-template
-    version: 0.0.4
+    version: 0.0.6
     repository: "https://dtsulik.github.io/homelab-monorepo/"
   - name: redis
     condition: redis.enabled
     version: 17.3.14
     repository: "https://charts.bitnami.com/bitnami"
-  - name: gif-doggo-apigw
-    condition: gif-doggo-apigw.enabled
-    version: 0.0.4
+  - name: gif-doggo-bff
+    condition: gif-doggo-bff.enabled
+    version: 0.0.6
     repository: "https://dtsulik.github.io/homelab-monorepo/"
   - name: gif-doggo-intake
     condition: gif-doggo-intake.enabled
-    version: 0.0.4
+    version: 0.0.6
     repository: "https://dtsulik.github.io/homelab-monorepo/"
   - name: gif-doggo-output
     condition: gif-doggo-output.enabled
-    version: 0.0.4
+    version: 0.0.6
     repository: "https://dtsulik.github.io/homelab-monorepo/"
   - name: gif-doggo-process
     condition: gif-doggo-process.enabled
-    version: 0.0.4
+    version: 0.0.6
     repository: "https://dtsulik.github.io/homelab-monorepo/"
   - name: gif-doggo-request
     condition: gif-doggo-request.enabled
-    version: 0.0.4
+    version: 0.0.6
     repository: "https://dtsulik.github.io/homelab-monorepo/"
   - name: gif-doggo-status
     condition: gif-doggo-status.enabled
-    version: 0.0.4
+    version: 0.0.6
+    repository: "https://dtsulik.github.io/homelab-monorepo/"
+  - name: gif-doggo-random
+    condition: gif-doggo-random.enabled
+    version: 0.0.6
     repository: "https://dtsulik.github.io/homelab-monorepo/"
