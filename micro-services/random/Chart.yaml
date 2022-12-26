@@ -1,6 +1,6 @@
 apiVersion: v2
-name: gif-doggo-intake
-description: Microservice for intake of doggos
+name: gif-doggo-random
+description: Microservice for getting random doggos
 type: application
 version: 0.0.5
 

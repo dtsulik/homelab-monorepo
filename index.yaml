@@ -2,12 +2,110 @@ apiVersion: v1
 entries:
   app-template:
   - apiVersion: v2
-    created: "2022-12-26T22:02:26.030041279+04:00"
+    created: "2022-12-26T22:26:18.160913492+04:00"
     description: A library for deploying simple apps
     digest: ac4ef3b95cd4554ec3b8cbb35de27a68e0e7af9660004b0180246027d2ce4161
     name: app-template
     type: library
     urls:
-    - https://dtsulik.github.io/homelab-monorepo/charts/app-template-0.0.5.tgz
+    - https://dtsulik.github.io/homelab-monorepo/app-template-0.0.5.tgz
     version: 0.0.5
-generated: "2022-12-26T22:02:26.029478401+04:00"
+  gif-doggo-bff:
+  - apiVersion: v2
+    created: "2022-12-26T22:26:18.1616977+04:00"
+    dependencies:
+    - name: app-template
+      repository: https://dtsulik.github.io/homelab-monorepo/
+      version: 0.0.5
+    description: BFF doggo
+    digest: 8cdf40022e525a0136c7bee613eef9b28ce4ddc252c9eb3e0bfa78464d44ef27
+    name: gif-doggo-bff
+    type: application
+    urls:
+    - https://dtsulik.github.io/homelab-monorepo/gif-doggo-bff-0.0.5.tgz
+    version: 0.0.5
+  gif-doggo-intake:
+  - apiVersion: v2
+    created: "2022-12-26T22:26:18.162313268+04:00"
+    dependencies:
+    - name: app-template
+      repository: https://dtsulik.github.io/homelab-monorepo/
+      version: 0.0.5
+    description: Microservice for intake of doggos
+    digest: deae8a4dc57d92a58f4f122efec7eaeaa846f7c13a0f57a16eb317b1c1271485
+    name: gif-doggo-intake
+    type: application
+    urls:
+    - https://dtsulik.github.io/homelab-monorepo/gif-doggo-intake-0.0.5.tgz
+    version: 0.0.5
+  gif-doggo-output:
+  - apiVersion: v2
+    created: "2022-12-26T22:26:18.163348963+04:00"
+    dependencies:
+    - name: app-template
+      repository: https://dtsulik.github.io/homelab-monorepo/
+      version: 0.0.5
+    description: Microservice for doggo output
+    digest: 2432bc518bc6663ae628826b2e33dbaa257facdd499c330223905975cfcde134
+    name: gif-doggo-output
+    type: application
+    urls:
+    - https://dtsulik.github.io/homelab-monorepo/gif-doggo-output-0.0.5.tgz
+    version: 0.0.5
+  gif-doggo-process:
+  - apiVersion: v2
+    created: "2022-12-26T22:26:18.164261918+04:00"
+    dependencies:
+    - name: app-template
+      repository: https://dtsulik.github.io/homelab-monorepo/
+      version: 0.0.5
+    description: Microservice for processing doggo requests in queue
+    digest: 4f055fa4c9e8cfa7b846524ccc33c66a44825ef624af6d91f943292fa2923a79
+    name: gif-doggo-process
+    type: application
+    urls:
+    - https://dtsulik.github.io/homelab-monorepo/gif-doggo-process-0.0.5.tgz
+    version: 0.0.5
+  gif-doggo-random:
+  - apiVersion: v2
+    created: "2022-12-26T22:26:18.165525393+04:00"
+    dependencies:
+    - name: app-template
+      repository: https://dtsulik.github.io/homelab-monorepo/
+      version: 0.0.5
+    description: Microservice for getting random doggos
+    digest: be08e993de6fa727016cf1b4b5b825a6930283fd849dbe86badfb853b81c65da
+    name: gif-doggo-random
+    type: application
+    urls:
+    - https://dtsulik.github.io/homelab-monorepo/gif-doggo-random-0.0.5.tgz
+    version: 0.0.5
+  gif-doggo-request:
+  - apiVersion: v2
+    created: "2022-12-26T22:26:18.166120623+04:00"
+    dependencies:
+    - name: app-template
+      repository: https://dtsulik.github.io/homelab-monorepo/
+      version: 0.0.5
+    description: Microservice for putting doggo requests in queue
+    digest: e3f6ba14c3ff053d2ced04271add1ff5e9695221e8eff0b472b97209ef95cc47
+    name: gif-doggo-request
+    type: application
+    urls:
+    - https://dtsulik.github.io/homelab-monorepo/gif-doggo-request-0.0.5.tgz
+    version: 0.0.5
+  gif-doggo-status:
+  - apiVersion: v2
+    created: "2022-12-26T22:26:18.166641181+04:00"
+    dependencies:
+    - name: app-template
+      repository: https://dtsulik.github.io/homelab-monorepo/
+      version: 0.0.5
+    description: Microservice for getting doggo request status
+    digest: cca143880dc59349ba05c064f4139062ebadb7e69fba00387bcbbffe0b1c057f
+    name: gif-doggo-status
+    type: application
+    urls:
+    - https://dtsulik.github.io/homelab-monorepo/gif-doggo-status-0.0.5.tgz
+    version: 0.0.5
+generated: "2022-12-26T22:26:18.160458318+04:00"
