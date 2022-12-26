@@ -1,6 +1,8 @@
 # gif-doggo charts
 
-This branch is used to generate helm charts served via github pages
+This branch is used to generate helm charts served via github pages.
+
+I would like more automation for this with support for more complex structure.
 
 
 ## some useful commands
