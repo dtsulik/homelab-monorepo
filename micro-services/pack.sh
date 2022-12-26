@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e -o pipefail
+
 for d in */ ; do
     echo "Processing $d"
     cd $d
