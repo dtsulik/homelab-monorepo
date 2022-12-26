@@ -4,7 +4,6 @@ Microservice to generate a gif from series of images. It is based on [workshop c
 
 This one has more to it:
 - Tracing
-- ApiGW (this is here to maybe in future add A/B deployments)
 - Structured Logging
 - Metrics
 
