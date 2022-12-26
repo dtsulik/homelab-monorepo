@@ -2,9 +2,9 @@ apiVersion: v2
 name: gif-doggo-intake
 description: Microservice for intake of doggos
 type: application
-version: 0.0.5
+version: 0.0.6
 
 dependencies:
   - name: app-template
-    version: 0.0.5
+    version: 0.0.6
     repository: "https://dtsulik.github.io/homelab-monorepo/"
