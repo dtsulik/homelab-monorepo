@@ -10,8 +10,8 @@ redis:
   master:
     persistence:
       enabled: false
-gif-doggo-apigw:
-  enabled: false
+gif-doggo-bff:
+  enabled: true
   env: *envs
 gif-doggo-intake:
   enabled: true
@@ -26,5 +26,8 @@ gif-doggo-request:
   enabled: true
   env: *envs
 gif-doggo-status:
+  enabled: true
+  env: *envs
+gif-doggo-random:
   enabled: true
   env: *envs
