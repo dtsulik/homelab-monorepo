@@ -10,3 +10,4 @@ This one has more to it:
 ## service architecture
 
 Idea is to expand on the services from the workshop and add apigw to it add more cloud agnostic spin to it. (The workshop stack was aws native).
+
