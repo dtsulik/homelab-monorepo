@@ -8,7 +8,7 @@ spec:
   - matrix:
       generators:
       - git:
-          repoURL: https://github.com/dtsulik/homelab-gitops.git
+          repoURL: https://github.com/dtsulik/homelab-monorepo.git
           revision: HEAD
           directories:
           - path: apps/*
@@ -33,7 +33,7 @@ spec:
           prune: true
       project: '{{values.project}}'
       source:
-        repoURL: https://github.com/dtsulik/homelab-gitops.git
+        repoURL: https://github.com/dtsulik/homelab-monorepo.git
         targetRevision: HEAD
         path: '{{path}}'
       destination:
