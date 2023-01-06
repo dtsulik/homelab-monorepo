@@ -67,6 +67,7 @@ func New(name, path string) (*Project, error) {
 			}
 			manifestExists = true
 		}
+		// FIXME this is golang specific
 		if dir.Name() == "cmd" {
 			err := p.setupServices(filepath.Join(path, dir.Name()))
 			if err != nil {

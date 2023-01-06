@@ -20,6 +20,7 @@ CI is done in Golang most it is done with dagger.io, but I am looking to replace
 - Fuzzing?
 - `apigw` service should be named bff (done - now helm chart)
 - errors need to be more structured and relevant types need custom errors/stringers
+- project creation in CI and builder are golang specific
 
 ### TODO release specific todos
 - add semantic release
