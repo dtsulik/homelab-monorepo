@@ -6,12 +6,12 @@ name: CI
 on:
   push:
     branches: [ "master" ]
-    paths-ignore:
-      - "ci/**"
+    paths:
+      - "projects/**"
   pull_request:
     branches: [ "master" ]
-    paths-ignore:
-      - "ci/**"
+    paths:
+      - "projects/**"
 
 jobs:
 
