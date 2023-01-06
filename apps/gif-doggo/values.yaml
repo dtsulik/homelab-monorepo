@@ -1,5 +1,5 @@
 env: &envs
-  REDIS_ENDPOINT: "gif-doggo-homelab-vm-redis-master:6379"
+  REDIS_ENDPOINT: "gif-doggo-redis-master:6379"
   TRACECOLLECTOR_ENDPOINT: "http://jaeger.jaegerallinone:14268/api/traces"
 
 redis:
