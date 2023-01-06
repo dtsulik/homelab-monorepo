@@ -59,3 +59,5 @@ kind create cluster --config=kind.yaml
 ```
 
 
+
+Gitops repo for homelab, used by ArgoCD
