@@ -5,37 +5,37 @@ metadata:
   namespace: argocd
 spec:
   generators:
-  - matrix:
-      generators:
-      - git:
-          repoURL: https://github.com/dtsulik/homelab-monorepo.git
-          revision: HEAD
-          directories:
-          - path: apps/*
-      - list:
-          elements:
-          - cluster: homelab-vm
-            url: https://kubernetes.default.svc
-            values:
-              project: default
+    - matrix:
+        generators:
+          - git:
+              repoURL: https://github.com/dtsulik/homelab-monorepo.git
+              revision: HEAD
+              directories:
+                - path: cd/gitops/apps/*
+          - list:
+              elements:
+                - cluster: homelab-vm
+                  url: https://kubernetes.default.svc
+                  values:
+                    project: default
   template:
     metadata:
       # annotations:
       #   argocd-image-updater.argoproj.io/image-list: dtsulik/gif-doggo-apigw:latest,dtsulik/gif-doggo-intake:latest,dtsulik/gif-doggo-output:latest,dtsulik/gif-doggo-process:latest,dtsulik/gif-doggo-request:latest,dtsulik/gif-doggo-status:latest
       #   argocd-image-updater.argoproj.io/update-strategy: digest
       #   argocd-image-updater.argoproj.io/allow-tags: regexp:latest
-      name: '{{path.basename}}'
+      name: "{{path.basename}}"
     spec:
       syncPolicy:
         syncOptions:
-        - CreateNamespace=true
+          - CreateNamespace=true
         automated:
           prune: true
-      project: '{{values.project}}'
+      project: "{{values.project}}"
       source:
         repoURL: https://github.com/dtsulik/homelab-monorepo.git
         targetRevision: HEAD
-        path: '{{path}}'
+        path: "{{path}}"
       destination:
-        server: '{{url}}'
-        namespace: '{{path.basename}}'
+        server: "{{url}}"
+        namespace: "{{path.basename}}"

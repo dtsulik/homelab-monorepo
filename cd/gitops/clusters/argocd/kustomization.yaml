@@ -1,6 +1,6 @@
 resources:
-- https://raw.githubusercontent.com/argoproj/argo-cd/v2.5.5/manifests/install.yaml
-- argocd-ingress.yaml
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v2.5.5/manifests/install.yaml
+  - argocd-ingress.yaml
 patchesStrategicMerge:
-- argocd-notifications-cm.yaml
+  - argocd-notifications-cm.yaml
 namespace: argocd

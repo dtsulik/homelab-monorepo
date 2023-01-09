@@ -4,6 +4,6 @@ type: application
 version: 3.10.0
 
 dependencies:
-- name: gatekeeper
-  version: 3.10.0
-  repository: https://open-policy-agent.github.io/gatekeeper/charts
+  - name: gatekeeper
+    version: 3.10.0
+    repository: https://open-policy-agent.github.io/gatekeeper/charts

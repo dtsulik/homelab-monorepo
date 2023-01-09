@@ -5,33 +5,33 @@ metadata:
   namespace: argocd
 spec:
   generators:
-  - matrix:
-      generators:
-      - git:
-          repoURL: https://github.com/dtsulik/homelab-monorepo.git
-          revision: HEAD
-          directories:
-          - path: addons/*
-      - list:
-          elements:
-          - cluster: homelab-vm
-            url: https://kubernetes.default.svc
-            values:
-              project: default
+    - matrix:
+        generators:
+          - git:
+              repoURL: https://github.com/dtsulik/homelab-monorepo.git
+              revision: HEAD
+              directories:
+                - path: cd/gitops/addons/*
+          - list:
+              elements:
+                - cluster: homelab-vm
+                  url: https://kubernetes.default.svc
+                  values:
+                    project: default
   template:
     metadata:
-      name: '{{path.basename}}-{{cluster}}'
+      name: "{{path.basename}}-{{cluster}}"
     spec:
       syncPolicy:
         syncOptions:
-        - CreateNamespace=true
+          - CreateNamespace=true
         automated:
           prune: true
-      project: '{{values.project}}'
+      project: "{{values.project}}"
       source:
         repoURL: https://github.com/dtsulik/homelab-monorepo.git
         targetRevision: HEAD
-        path: '{{path}}'
+        path: "{{path}}"
       destination:
-        server: '{{url}}'
-        namespace: '{{path.basename}}'
+        server: "{{url}}"
+        namespace: "{{path.basename}}"

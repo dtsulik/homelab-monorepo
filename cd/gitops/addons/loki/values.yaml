@@ -5,7 +5,7 @@ loki:
       replication_factor: 1
     auth_enabled: false
     storage:
-      type: 'filesystem'
+      type: "filesystem"
     limits_config:
       retention_period: 6h
     test:

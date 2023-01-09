@@ -4,7 +4,7 @@ type: application
 version: 3.8.0
 
 dependencies:
-- name: loki
-  version: 3.8.0
-  condition: loki.enabled
-  repository: https://grafana.github.io/helm-charts
+  - name: loki
+    version: 3.8.0
+    condition: loki.enabled
+    repository: https://grafana.github.io/helm-charts

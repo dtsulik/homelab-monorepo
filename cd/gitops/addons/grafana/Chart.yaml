@@ -4,6 +4,6 @@ type: application
 version: 6.48.0
 
 dependencies:
-- name: grafana
-  version: 6.48.0
-  repository: https://grafana.github.io/helm-charts
+  - name: grafana
+    version: 6.48.0
+    repository: https://grafana.github.io/helm-charts
